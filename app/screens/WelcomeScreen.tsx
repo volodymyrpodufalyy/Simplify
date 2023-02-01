@@ -8,14 +8,14 @@ import { isRTL } from "../i18n"
 import { colors, spacing } from "../theme"
 import { useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle"
 
-const welcomeLogo = require("../../assets/images/logo.png")
-const welcomeFace = require("../../assets/images/welcome-face.png")
+
+const welcomeFace = require("../../assets/images/welcome-image.png")
 
 
 export const WelcomeScreen = ({ navigation }) => {
 
   function goNext() {
-    navigation.navigate("Demo")
+    navigation.navigate("Login")
   }
 
   const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
@@ -23,41 +23,42 @@ export const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={$container}>
       <View style={$topContainer}>
-        <Image style={$welcomeLogo} source={welcomeLogo} resizeMode="contain" />
         <Text
           testID="welcome-heading"
           style={$welcomeHeading}
-          tx="welcomeScreen.readyForLaunch"
+          tx="welcomeScreen.welcome"
           preset="heading"
         />
-        <Text tx="welcomeScreen.exciting" preset="subheading" />
-        <Image style={$welcomeFace} source={welcomeFace} resizeMode="contain" />
       </View>
 
-      <View style={[$bottomContainer, $bottomContainerInsets]}>
-        <Text tx="welcomeScreen.postscript" size="md" />
-        {/* @demo remove-block-start */}
+      <View>
+        <Image style={$welcomeFace} source={welcomeFace} />
+      </View>
+
+      <View style={$bottomContainer}>
         <Button
           testID="next-screen-button"
           preset="reversed"
           tx="welcomeScreen.letsGo"
           onPress={goNext}
         />
-        {/* @demo remove-block-end */}
       </View>
+
+
     </View>
   )
 }
 
 const $container: ViewStyle = {
   flex: 1,
-  backgroundColor: colors.background,
+  flexDirection:'column',
+  backgroundColor: colors.palette.neutral100,
 }
 
 const $topContainer: ViewStyle = {
   flexShrink: 1,
-  flexGrow: 1,
-  flexBasis: "57%",
+
+  flexBasis: "65%",
   justifyContent: "center",
   paddingHorizontal: spacing.large,
 }
@@ -65,25 +66,17 @@ const $topContainer: ViewStyle = {
 const $bottomContainer: ViewStyle = {
   flexShrink: 1,
   flexGrow: 0,
-  flexBasis: "43%",
-  backgroundColor: colors.palette.neutral100,
-  borderTopLeftRadius: 16,
-  borderTopRightRadius: 16,
+  flexBasis: "50%",
+
+
   paddingHorizontal: spacing.large,
   justifyContent: "space-around",
 }
-const $welcomeLogo: ImageStyle = {
-  height: 88,
-  width: "100%",
-  marginBottom: spacing.huge,
-}
 
 const $welcomeFace: ImageStyle = {
-  height: 169,
-  width: 269,
-  position: "absolute",
-  bottom: -47,
-  right: -80,
+  height: 500,
+  width: 500,
+
   transform: [{ scaleX: isRTL ? -1 : 1 }],
 }
 
