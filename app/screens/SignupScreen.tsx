@@ -1,15 +1,13 @@
 import React, { useMemo, useRef, useState } from "react"
 import {
   Image,
-  ImageBackground,
   ImageStyle,
   TextInput,
-  TextStyle,
   TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native"
-import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "../components"
+import { Button, Icon, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { colors, spacing } from "../theme"
 
 const coffee = require("../../assets/images/coffe.png")
