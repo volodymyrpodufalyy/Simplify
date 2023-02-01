@@ -11,7 +11,7 @@ const welcomeFace = require("../../assets/images/welcome-image.png")
 export const WelcomeScreen = ({ navigation }) => {
 
   function goNext() {
-    navigation.navigate("Login")
+    navigation.navigate("SignUp")
   }
 
 
