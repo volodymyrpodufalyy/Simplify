@@ -4,13 +4,9 @@ import {
   Button,
   Text,
 } from "../components"
-import { isRTL } from "../i18n"
 import { colors, spacing } from "../theme"
-import { useSafeAreaInsetsStyle } from "../utils/useSafeAreaInsetsStyle"
-
 
 const welcomeFace = require("../../assets/images/welcome-image.png")
-
 
 export const WelcomeScreen = ({ navigation }) => {
 
@@ -18,7 +14,6 @@ export const WelcomeScreen = ({ navigation }) => {
     navigation.navigate("Login")
   }
 
-  const $bottomContainerInsets = useSafeAreaInsetsStyle(["bottom"])
 
   return (
     <View style={$container}>
@@ -31,9 +26,9 @@ export const WelcomeScreen = ({ navigation }) => {
         />
       </View>
 
-      <View>
-        <Image style={$welcomeFace} source={welcomeFace} />
-      </View>
+
+      <Image style={$welcomeFace} source={welcomeFace} />
+
 
       <View style={$bottomContainer}>
         <Button
@@ -52,34 +47,27 @@ export const WelcomeScreen = ({ navigation }) => {
 const $container: ViewStyle = {
   flex: 1,
   flexDirection:'column',
+  justifyContent: "space-around",
   backgroundColor: colors.palette.neutral100,
 }
 
 const $topContainer: ViewStyle = {
-  flexShrink: 1,
-
-  flexBasis: "65%",
   justifyContent: "center",
   paddingHorizontal: spacing.large,
 }
 
 const $bottomContainer: ViewStyle = {
-  flexShrink: 1,
-  flexGrow: 0,
-  flexBasis: "50%",
-
-
   paddingHorizontal: spacing.large,
   justifyContent: "space-around",
 }
-
-const $welcomeFace: ImageStyle = {
-  height: 500,
-  width: 500,
-
-  transform: [{ scaleX: isRTL ? -1 : 1 }],
-}
-
 const $welcomeHeading: TextStyle = {
   marginBottom: spacing.medium,
 }
+
+const $welcomeFace: ImageStyle = {
+  height: 450,
+  width: 450,
+  right: -30,
+}
+
+
