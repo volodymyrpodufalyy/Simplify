@@ -6,7 +6,7 @@ const en = {
     logOut: "Log Out",
   },
   welcomeScreen: {
-    welcome: "Manage time more effectively",
+    welcome: "Manage time\nmore effectively",
     letsGo: "Let's go!",
   },
   errorScreen: {
@@ -27,14 +27,17 @@ const en = {
     invalidEmail: "Invalid email address.",
   },
   loginScreen: {
-    signIn: "Sign In",
-    enterDetails:
-      "Enter your details below to unlock top secret info. You'll never guess what we've got waiting. Or maybe you will; it's not rocket science here.",
-    emailFieldLabel: "Email",
+    signIn: "Sign Up",
+    forBestImpression: "For best impression",
+    haveAccount: "I have account already",
+    or: "or",
+    signUpGoogle: "sign up with Google",
+    signUpFacebook: "sign up with Facebook",
+      emailFieldLabel: "Email",
     passwordFieldLabel: "Password",
     emailFieldPlaceholder: "Enter your email address",
     passwordFieldPlaceholder: "Super secret password here",
-    tapToSignIn: "Tap to sign in!",
+    tapToSignIn: "Tap to sign up!",
     hint: "Hint: you can use any email address and your favorite password :)",
   },
   demoNavigator: {
