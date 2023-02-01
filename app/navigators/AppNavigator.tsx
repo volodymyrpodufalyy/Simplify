@@ -20,7 +20,7 @@ const Stack = createNativeStackNavigator()
 
 const AppStack = ()=> {
 
-  const isAuthenticated = false
+  const isAuthenticated = true
 
 
   return (

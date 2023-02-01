@@ -40,6 +40,9 @@ const en = {
     tapToSignIn: "Tap to sign up!",
     hint: "Hint: you can use any email address and your favorite password :)",
   },
+  HomeScreen:{
+    upcoming: 'Upcoming'
+  },
   demoNavigator: {
     componentsTab: "Components",
     debugTab: "Debug",
