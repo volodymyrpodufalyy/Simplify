@@ -1,13 +1,15 @@
 import React from "react"
 import { View, ViewStyle } from "react-native"
-import { Header, Text} from "../components"
+import {  BottomSheetApp, Header, Text } from "../components"
 import { colors, spacing } from "../theme"
 import { Calendar } from "react-native-calendars"
+import {  GestureHandlerRootView } from "react-native-gesture-handler"
 
 export const HomeScreen = () => {
 
 
   return (
+    <GestureHandlerRootView style={{flex:1}}>
     <View style={$container}>
       <Header title={'February'}
               titleContainerStyle={{alignItems:'flex-start'}}
@@ -15,6 +17,7 @@ export const HomeScreen = () => {
               rightIconColor={colors.palette.neutral750}
               backgroundColor={colors.palette.neutral100}
       />
+
       <View>
         <Calendar
           theme={{
@@ -28,13 +31,12 @@ export const HomeScreen = () => {
           }}
         />
       </View>
-      <View style={$upcomingContainer}>
-        <Text tx={'HomeScreen.upcoming'} style={{color:colors.palette.neutral100,marginBottom:20}} size={'md'} />
-        <View style={$item}>
-
-        </View>
+      <View style={{position:'absolute', height:'100%', width:'100%'}}>
+        <BottomSheetApp/>
       </View>
+
     </View>
+    </GestureHandlerRootView>
   )
 }
 
