@@ -1,13 +1,15 @@
-import React from "react"
+import React, { useState } from "react"
 import { View, ViewStyle } from "react-native"
 import {  BottomSheetApp, Header, Text } from "../components"
 import { colors, spacing } from "../theme"
-import { Calendar } from "react-native-calendars"
+import { Calendar, WeekCalendar,CalendarProvider } from "react-native-calendars"
 import {  GestureHandlerRootView } from "react-native-gesture-handler"
 
 export const HomeScreen = () => {
 
-
+  const [heightCalendar,setHeightCalendar] = useState(1)
+  const date = new Date()
+  console.log(date.toLocaleDateString())
   return (
     <GestureHandlerRootView style={{flex:1}}>
     <View style={$container}>
@@ -18,21 +20,27 @@ export const HomeScreen = () => {
               backgroundColor={colors.palette.neutral100}
       />
 
-      <View>
-        <Calendar
-          theme={{
-            // @ts-ignore
-            "stylesheet.calendar.header": {
-              header: {
-                height: 0,
-                opacity: 0
+      <CalendarProvider date={'2023-02-02'} style={{flex:1}}>
+        {
+          heightCalendar===1?
+            <WeekCalendar  />
+          :<Calendar
+            theme={{
+              // @ts-ignore
+              "stylesheet.calendar.header": {
+                header: {
+                  height: 0,
+                  opacity: 0
+                }
               }
-            }
-          }}
-        />
-      </View>
+            }}
+          />
+
+        }
+
+      </CalendarProvider>
       <View style={{position:'absolute', height:'100%', width:'100%'}}>
-        <BottomSheetApp/>
+        <BottomSheetApp setHeight={setHeightCalendar}/>
       </View>
 
     </View>

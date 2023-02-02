@@ -1,19 +1,16 @@
-import React, { useCallback,  useRef, useMemo } from "react"
-import {Dimensions, StyleSheet, View, ViewProps,
+import React, { useCallback, useRef, useMemo, useEffect } from "react"
+import {Dimensions, StyleSheet, View,
 } from "react-native"
 import { colors} from "../theme"
 import { Text } from "./Text"
 
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { useSharedValue } from "react-native-reanimated"
 
-export interface BottomSheetProps extends ViewProps {
-  maxWidth?: number
-  maxHeight?: number
-}
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window")
 
-export function BottomSheetApp(props: BottomSheetProps) {
+export function BottomSheetApp({setHeight}) {
 
   const sheetRef = useRef<BottomSheet>(null)
 
@@ -28,8 +25,9 @@ export function BottomSheetApp(props: BottomSheetProps) {
 
   // callbacks
   const handleSheetChange = useCallback((index) => {
-    console.log("handleSheetChange", index)
+    setHeight(index)
   }, [])
+
 
 
   const renderItem = useCallback(
@@ -40,6 +38,13 @@ export function BottomSheetApp(props: BottomSheetProps) {
     ),
     [],
   )
+
+  const sharedVal = useSharedValue(0);
+
+  useEffect(()=>{
+    console.log(sharedVal)
+  },[sharedVal])
+
   return (
 
     <View style={styles.container}>
@@ -49,6 +54,10 @@ export function BottomSheetApp(props: BottomSheetProps) {
         snapPoints={["50", "80%"]}
         onChange={handleSheetChange}
         handleStyle={styles.sheetContainer}
+        animatedPosition={sharedVal}
+        style={{backgroundColor:'transparent'}}
+        backgroundStyle={{ backgroundColor:colors.palette.neutral750, borderRadius:30 }}
+        handleIndicatorStyle={ {backgroundColor:colors.palette.neutral100}}
       >
         <View style={{ backgroundColor: colors.palette.neutral750, paddingHorizontal: 20 }}>
           <Text tx={"HomeScreen.upcoming"}
@@ -76,10 +85,10 @@ const styles = StyleSheet.create({
     paddingTop: 200,
     zIndex: 1,
 
+
   },
   contentContainer: {
     backgroundColor: colors.palette.neutral750,
-
   },
   itemContainer: {
     padding: 6,
@@ -87,7 +96,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 15,
     height: 70,
-
     backgroundColor: colors.palette.secondary500,
     borderRadius: 15,
   },
