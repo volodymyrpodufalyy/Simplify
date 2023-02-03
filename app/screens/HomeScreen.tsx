@@ -1,48 +1,36 @@
 import React, { useState } from "react"
-import { View, ViewStyle } from "react-native"
-import { BottomSheetApp, Header, Text } from "../components"
-import { colors, spacing } from "../theme"
-import { Calendar, WeekCalendar, CalendarProvider } from "react-native-calendars"
+import { Text, TextStyle, View, ViewStyle } from "react-native"
+import { Header } from "../components"
+import { colors, spacing, typography } from "../theme"
+import { Calendar, CalendarProvider } from "react-native-calendars"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 
 export const HomeScreen = () => {
-
   const [heightCalendar, setHeightCalendar] = useState(1)
   const date = new Date()
   console.log(date.toLocaleDateString())
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={$container}>
-        <Header title={"February"}
-                titleContainerStyle={{ alignItems: "flex-start" }}
-                rightIcon={"calendar"}
-                rightIconColor={colors.palette.neutral750}
-                backgroundColor={colors.palette.neutral100}
+        <Header
+          title={"February"}
+          titleContainerStyle={{ alignItems: "flex-start" }}
+          rightIcon={"calendar"}
+          rightIconColor={colors.palette.neutral750}
+          backgroundColor={colors.palette.neutral100}
         />
-
-        <CalendarProvider date={"2023-02-02"} style={{ flex: 1 }}>
-          {
-            heightCalendar === 1 ?
-              <WeekCalendar />
-              : <Calendar
-                theme={{
-                  // @ts-ignore
-                  "stylesheet.calendar.header": {
-                    header: {
-                      height: 0,
-                      opacity: 0,
-                    },
-                  },
-                }}
-              />
-
-          }
-
-        </CalendarProvider>
-        <View style={{ position: "absolute", height: "100%", width: "100%" }}>
-          <BottomSheetApp setHeight={setHeightCalendar} />
+        <View style={$topContainer}>
+          <CalendarProvider date={"2023-02-02"}>
+            <Calendar
+              // @ts-ignore (Override default styles. Custom styles type-checks isn't fully supported)
+              theme={calendarTheme}
+            />
+          </CalendarProvider>
         </View>
-
+        <View style={$bottomContainer}>
+          {/* TODO: replace with <UpcomingEvents /> component */}
+          <Text style={$upcomingEventsTitle}>Upcoming</Text>
+        </View>
       </View>
     </GestureHandlerRootView>
   )
@@ -54,23 +42,32 @@ const $container: ViewStyle = {
   width: "100%",
   backgroundColor: "#fff",
 }
-const $upcomingContainer: ViewStyle = {
+
+const $topContainer: ViewStyle = {
   flex: 1,
-  height: "100%",
-  width: "100%",
+  backgroundColor: "#fff",
+}
+
+const $bottomContainer: ViewStyle = {
+  flex: 2,
   backgroundColor: colors.palette.neutral750,
-  borderTopLeftRadius: 30,
-  borderTopRightRadius: 30,
-  paddingHorizontal: spacing.large,
-  paddingVertical: spacing.large,
-
+  borderTopLeftRadius: 25,
+  borderTopRightRadius: 25,
 }
-const $item: ViewStyle = {
-  height: 100,
-  width: "100%",
-  backgroundColor: colors.palette.secondary500,
-  borderRadius: 30,
-  paddingHorizontal: spacing.large,
-  paddingVertical: spacing.large,
 
+const $upcomingEventsTitle: TextStyle = {
+  color: colors.palette.neutral100,
+  fontSize: 20,
+  ...typography.primary,
+  textAlign: "center",
+  paddingTop: spacing.medium,
 }
+
+const $calendar = {
+  header: {
+    height: 0,
+    opacity: 0,
+  },
+}
+
+const calendarTheme = { "stylesheet.calendar.header": $calendar }
