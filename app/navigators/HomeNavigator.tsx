@@ -9,6 +9,7 @@ import HomeIcon from "../../assets/icons/homeIcon.svg"
 import AddEventIcon from "../../assets/icons/addEventIcon.svg"
 import ProfileIcon from "../../assets/icons/profileIcon.svg"
 
+
 const Tab = createBottomTabNavigator()
 
 const TabBarIcon = ({ Component, focused }: { Component: ComponentType; focused: boolean }) => (

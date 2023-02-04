@@ -8,11 +8,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
-import { SignInScreen, SignupScreen, WelcomeScreen } from "../screens"
+import { SignInScreen, SignupScreen, WelcomeScreen} from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { HomeNavigator } from "./HomeNavigator"
-
-
 
 const exitRoutes = Config.exitRoutes
 
@@ -31,6 +29,7 @@ const AppStack = ()=> {
 
       {isAuthenticated ? (
         <>
+
           <Stack.Screen name="HomeNavigation" component={HomeNavigator}/>
         </>
       ) : (
@@ -38,6 +37,7 @@ const AppStack = ()=> {
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="SignUp" component={SignupScreen} />
           <Stack.Screen name="SignIn" component={SignInScreen} />
+
         </>
       )}
 
