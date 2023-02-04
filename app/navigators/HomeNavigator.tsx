@@ -5,7 +5,7 @@ import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { colors, spacing, typography } from "../theme"
-import { HomeScreen } from "../screens"
+import { AddNewEventScreen, HomeScreen } from "../screens"
 
 
 const Tab = createBottomTabNavigator()
@@ -26,6 +26,7 @@ export function HomeNavigator() {
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="AddEventScreen" component={AddNewEventScreen} />
 
     </Tab.Navigator>
   )

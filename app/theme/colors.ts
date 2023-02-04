@@ -23,6 +23,7 @@ const palette = {
   secondary300: "#9196B9",
   secondary400: "#626894",
   secondary500: "#41476E",
+  secondary600: "#151b23",
 
   accent100: "#FFEED4",
   accent200: "#FFE1B2",

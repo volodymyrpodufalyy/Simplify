@@ -51,7 +51,7 @@ export function BottomSheetApp({setHeight}) {
       <BottomSheet
         index={1}
         ref={sheetRef}
-        snapPoints={["50", "80%"]}
+        snapPoints={["50%", "80%"]}
         onChange={handleSheetChange}
         handleStyle={styles.sheetContainer}
         animatedPosition={sharedVal}

@@ -87,6 +87,11 @@ export function Icon(props: IconProps) {
 export const iconRegistry = {
   back: require("../../assets/icons/back.png"),
   calendar: require("../../assets/icons/calendar.png"),
+  play: require("../../assets/icons/play.png"),
+  categories: require("../../assets/icons/categories.png"),
+  notes: require("../../assets/icons/notes.png"),
+  peoples: require("../../assets/icons/peoples.png"),
+  time: require("../../assets/icons/time.png"),
   bell: require("../../assets/icons/bell.png"),
   caretLeft: require("../../assets/icons/caretLeft.png"),
   caretRight: require("../../assets/icons/caretRight.png"),

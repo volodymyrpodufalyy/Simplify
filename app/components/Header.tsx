@@ -44,6 +44,7 @@ export interface HeaderProps {
    * Title text to display if not using `tx` or nested components.
    */
   title?: TextProps["text"]
+  leftTextStyle?: TextStyle
   /**
    * Title text which is looked up via i18n.
    */
@@ -133,7 +134,8 @@ interface HeaderActionProps {
   tx?: TextProps["tx"]
   txOptions?: TextProps["txOptions"]
   onPress?: TouchableOpacityProps["onPress"]
-  ActionComponent?: ReactElement
+  ActionComponent?: ReactElement,
+  leftTextStyle?: TextStyle,
 }
 
 /**
@@ -168,6 +170,7 @@ export function Header(props: HeaderProps) {
     style: $styleOverride,
     titleStyle: $titleStyleOverride,
     containerStyle: $containerStyleOverride,
+    leftTextStyle
   } = props
 
   const $containerInsets = useSafeAreaInsetsStyle(safeAreaEdges)
@@ -186,6 +189,7 @@ export function Header(props: HeaderProps) {
           txOptions={leftTxOptions}
           backgroundColor={backgroundColor}
           ActionComponent={LeftActionComponent}
+          leftTextStyle={leftTextStyle}
         />
 
         {!!titleContent && (
@@ -222,7 +226,7 @@ export function Header(props: HeaderProps) {
 }
 
 function HeaderAction(props: HeaderActionProps) {
-  const { backgroundColor, icon, text, tx, txOptions, onPress, ActionComponent, iconColor } = props
+  const { backgroundColor, icon, text, tx, leftTextStyle, txOptions, onPress, ActionComponent, iconColor } = props
 
   const content = tx ? translate(tx, txOptions) : text
 
@@ -236,7 +240,7 @@ function HeaderAction(props: HeaderActionProps) {
         disabled={!onPress}
         activeOpacity={0.8}
       >
-        <Text weight="medium" size="md" text={content} style={$actionText} />
+        <Text weight="medium" size="md" text={content} style={[$actionText,leftTextStyle]} />
       </TouchableOpacity>
     )
   }
@@ -282,7 +286,7 @@ const $actionTextContainer: ViewStyle = {
 }
 
 const $actionText: TextStyle = {
-  color: colors.tint,
+  color: colors.palette.neutral100,
 }
 
 const $actionIconContainer: ViewStyle = {

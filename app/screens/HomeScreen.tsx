@@ -9,7 +9,8 @@ export const HomeScreen = () => {
 
   const [heightCalendar, setHeightCalendar] = useState(1)
   const date = new Date()
-  console.log(date.toLocaleDateString())
+
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={$container}>
