@@ -1,8 +1,7 @@
 import React, { ComponentType } from "react"
 import { View, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { HomeScreen } from "../screens"
-import { AddEventScreen } from "../screens/AddEventScreen"
+import { AddNewEventScreen, HomeScreen } from "../screens"
 import { ProfileScreen } from "../screens/ProfileScreen"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import HomeIcon from "../../assets/icons/homeIcon.svg"
@@ -53,7 +52,7 @@ export function HomeNavigator() {
       />
       <Tab.Screen
         name="AddEvent"
-        component={AddEventScreen}
+        component={AddNewEventScreen}
         options={{
           tabBarIcon: ({ focused }) => <TabBarIcon Component={AddEventIcon} focused={focused} />,
         }}
