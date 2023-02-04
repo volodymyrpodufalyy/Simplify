@@ -92,7 +92,7 @@ const $inputContainer: ViewStyle = {
   paddingHorizontal: spacing.medium,
   backgroundColor: colors.palette.secondary600,
 }
-const $categoryContainer:ViewStyle={
+const $categoryContainer: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
 

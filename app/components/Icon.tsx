@@ -92,6 +92,7 @@ export const iconRegistry = {
   notes: require("../../assets/icons/notes.png"),
   peoples: require("../../assets/icons/peoples.png"),
   time: require("../../assets/icons/time.png"),
+  exit: require("../../assets/icons/exit.png"),
   bell: require("../../assets/icons/bell.png"),
   caretLeft: require("../../assets/icons/caretLeft.png"),
   caretRight: require("../../assets/icons/caretRight.png"),
