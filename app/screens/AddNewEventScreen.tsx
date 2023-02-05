@@ -1,22 +1,53 @@
-import React from "react"
-import { Image, ImageStyle, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import React, { useState } from "react"
+import { Dimensions, Image, ImageStyle, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import {
-  Button, Header, Icon,
+  Button, Dropdown, Header, Icon,
   Text, TextField,
 } from "../components"
 import { colors, spacing } from "../theme"
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
+const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
 export const AddNewEventScreen = ({ navigation }) => {
 
+  const category = [{ key: 1, value: "Work" },
+    { key: 2, value: "School" },
+    { key: 3, value: "Job1" },
+    { key: 4, value: "Job2" },
+    { key: 5, value: "Job3" },
+    { key: 6, value: "Job4" },
+    { key: 7, value: "Job5" },
+    { key: 8, value: "Job6" },
+  ]
+
+  const [selected, setSelected] = useState("")
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [time, setTime] = useState('1:00');
+
+  const handleConfirm = (date) => {
+    const minutes = date.getMinutes().toLocaleString()==='0'?'00':date.getMinutes().toLocaleString()
+    setTime(date.getHours().toLocaleString()+':' + minutes  )
+    setDatePickerVisibility(false)
+  };
+
   return (
     <View style={$container}>
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="time"
+        onConfirm={handleConfirm}
+        onCancel={()=>setDatePickerVisibility(false)}
+        locale="en_GB"
+      />
       <Header titleStyle={{ color: colors.palette.neutral100, fontSize: 18 }}
               leftTextStyle={{ color: colors.palette.neutral100 }}
               leftIcon={"caretLeft"}
               leftIconColor={colors.palette.neutral100}
               titleTx={"NewEventScreen.newActivity"}
               rightIcon={"check"}
+              onRightPress={()=>navigation.navigate('Home')}
               rightIconColor={colors.palette.neutral100}
               containerStyle={{ borderBottomWidth: 0.5, borderColor: colors.palette.neutral800 }}
               backgroundColor={colors.palette.secondary600} />
@@ -27,8 +58,8 @@ export const AddNewEventScreen = ({ navigation }) => {
       </View>
       <View style={$categoryContainer}>
         <Icon icon={"categories"} color={"white"} size={28} />
-        <View style={$sectionText}>
-          <Text text={"Choose category"} style={{ color: "white" }} size={"md"} />
+        <View style={$selectCategory}>
+          <Dropdown data={category} setSelected={setSelected} search={false} />
         </View>
       </View>
       <View style={$sections}>
@@ -40,7 +71,7 @@ export const AddNewEventScreen = ({ navigation }) => {
         </View>
         <View style={$sectionContainer}>
           <View style={$sectionTime}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>setDatePickerVisibility(true)}>
               <Text text={"1:00"} style={{ color: "white" }} size={"md"} />
             </TouchableOpacity>
             <Text text={" - "} style={{ color: "white" }} size={"md"} />
@@ -49,18 +80,25 @@ export const AddNewEventScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity style={$sectionContainer}>
-          <Icon icon={"calendar"} color={"white"} size={28} />
+        <View style={$sectionContainer}>
+          <TouchableOpacity>
+            <Icon icon={"calendar"} color={"white"} size={28} />
+          </TouchableOpacity>
           <View style={$sectionText}>
-            <Text text={"Nov 1, 2023"} style={{ color: "white" }} size={"md"} />
+            <TouchableOpacity>
+              <Text text={"Nov 1, 2023"} style={{ color: "white" }} size={"md"} />
+
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={$sectionContainer}>
-          <Icon icon={"notes"} color={"white"} size={30} />
+        </View>
+        <View style={$sectionContainer}>
+          <TouchableOpacity><Icon icon={"attach"} color={"white"} size={30} /></TouchableOpacity>
           <View style={$sectionText}>
-            <Text tx={"NewEventScreen.addNote"} style={{ color: "white" }} size={"md"} />
+            <TouchableOpacity>
+              <Text tx={"NewEventScreen.attach"} style={{ color: "white" }} size={"md"} />
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+        </View>
         <TouchableOpacity style={$sectionContainer}>
           <Icon icon={"peoples"} color={"white"} size={30} />
           <TextInput style={$inputName} placeholder={"Add peoples for event"}
@@ -75,6 +113,7 @@ export const AddNewEventScreen = ({ navigation }) => {
 const $container: ViewStyle = {
   flex: 1,
   backgroundColor: colors.palette.neutral750,
+  width: "100%",
 }
 
 const $inputName: TextStyle = {
@@ -95,9 +134,18 @@ const $inputContainer: ViewStyle = {
 const $categoryContainer: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
-
-  paddingHorizontal: spacing.medium,
+  marginLeft: spacing.medium,
 }
+const $selectCategory: ViewStyle = {
+  borderBottomWidth: 1,
+  borderColor: colors.palette.neutral600,
+  marginLeft: spacing.medium,
+  alignSelf: "stretch",
+  width: "100%",
+  maxWidth: SCREEN_WIDTH - spacing.medium * 2 - 28,
+}
+
+
 const $sections: ViewStyle = {
   paddingHorizontal: spacing.medium,
 }
@@ -105,7 +153,10 @@ const $sections: ViewStyle = {
 const $sectionContainer: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
+  width: "100%",
+  maxWidth: SCREEN_WIDTH - spacing.medium * 2 - 28,
 }
+
 
 const $sectionText: ViewStyle = {
   justifyContent: "center",
