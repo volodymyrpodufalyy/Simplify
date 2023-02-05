@@ -1,4 +1,14 @@
-import { Image, SafeAreaView, Text, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import {
+  Image,
+  ImageStyle,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native"
 import { colors, spacing, typography } from "../theme"
 import React from "react"
 import { Icon } from "../components"
@@ -90,7 +100,7 @@ const $profileCard: TextStyle = {
   alignItems: "center",
   justifyContent: "center",
 }
-const $userImage: ViewStyle = {
+const $userImage: ImageStyle = {
   position: "relative",
   height: 100,
   width: 100,
