@@ -52,7 +52,7 @@ const en = {
   NewEventScreen: {
     newActivity: 'New activity',
     timeRange: 'Time range',
-    addNote: 'Add note',
+    attach: 'Attach a file',
 
   }
 }

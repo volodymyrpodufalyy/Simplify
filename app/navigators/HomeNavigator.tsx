@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { Dimensions, View, ViewStyle } from "react-native"
 import { AddNewEventScreen, HomeScreen } from "../screens"
 import { ProfileScreen } from "../screens/ProfileScreen"
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import { Icon, IconTypes } from "../components"
@@ -10,10 +11,10 @@ import { colors } from "../theme"
 const Tab = createBottomTabNavigator()
 
 const TabBarIcon = ({
-  icon,
-  focused,
-  left,
-}: {
+                      icon,
+                      focused,
+                      left,
+                    }: {
   icon: IconTypes
   focused: boolean
   left?: number
@@ -56,12 +57,14 @@ export function HomeNavigator() {
         <Tab.Screen
           name="AddEvent"
           component={AddNewEventScreen}
+
           options={{
             tabBarIcon: ({ focused }) => <TabBarIcon icon={"addEvent"} focused={focused} />,
+            tabBarStyle: {display:"none"}
           }}
           listeners={() => ({
             tabPress: () => {
-              tabOffset.value = getWidth()
+              tabOffset.value = -500
             },
           })}
         />
