@@ -79,7 +79,7 @@ export const AddNewEventScreen = ({ navigation }) => {
     setIsTimeStart(false)
     setTimePickerVisibility(true)
   }
-  
+
 
 
 
@@ -118,7 +118,7 @@ export const AddNewEventScreen = ({ navigation }) => {
       <View style={$categoryContainer}>
         <Icon icon={"categories"} color={"white"} size={28} />
         <View style={$selectCategory}>
-          <Dropdown data={category} setSelected={setSelected} search={false} />
+          <Dropdown data={category} setSelected={setSelected} />
         </View>
       </View>
       <View style={$sections}>
@@ -158,7 +158,9 @@ export const AddNewEventScreen = ({ navigation }) => {
               <View style={$file}>
                 <Icon icon={"file"} size={40} color={"white"} style={{ marginRight: 10 }} />
                 <View>
-                  <Text text={file?.name} style={{ color: "white", maxWidth: 150 }} numberOfLines={1} size={"md"} />
+                  {/* @ts-ignore */}
+                  <Text text={file.name} style={{ color: "white", maxWidth: 150 }} numberOfLines={1} size={"md"} />
+                  {/* @ts-ignore */}
                   <Text text={(file.size * 0.001).toString() + " KB"} style={{ color: "white" }} size={"xs"} />
                 </View>
                 <TouchableOpacity onPress={() => {
