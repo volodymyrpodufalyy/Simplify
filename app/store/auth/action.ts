@@ -8,10 +8,23 @@ const signUp = createAsyncThunk<any, UserSignUpRequest, AsyncThunkConfig>(Action
   async (registerPayload, { extra }) => {
 
     const { authApi } = extra
+    let errorMsg = ""
+    if (registerPayload.email.length === 0) errorMsg = "can't be blank"
+    if (registerPayload.email.length < 6) errorMsg = "must be at least 6 characters"
 
-    const user = await authApi.signUp(registerPayload)
+    try {
+      const res = await authApi.signUp(registerPayload)
+      return { user: res, error: null }
+    } catch (e) {
+      return {
+        user: null, error: {
+          name: e,
+          errorMsg: errorMsg,
+        },
+      }
+    }
 
-    return {  }
+
   })
 
 

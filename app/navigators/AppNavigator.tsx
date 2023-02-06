@@ -11,6 +11,8 @@ import Config from "../config"
 import { AddNewEventScreen, SignInScreen, SignupScreen, WelcomeScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { HomeNavigator } from "./HomeNavigator"
+import { rootReducer, useAppSelector } from "../store/store"
+
 
 const exitRoutes = Config.exitRoutes
 
@@ -30,7 +32,12 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = () => {
 
-const isAuthenticated = false
+
+  const { user } = useAppSelector((state: rootReducer) => state.AuthReducer)
+
+
+  const isAuthenticated = Boolean(user)
+
 
 
   return (
