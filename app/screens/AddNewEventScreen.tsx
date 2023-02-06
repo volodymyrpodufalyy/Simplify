@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react"
-import { Dimensions, Image, ImageStyle, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+/* eslint-disable @typescript-eslint/no-unused-vars,react-native/no-inline-styles */
+import React, { useState } from "react"
+import { Dimensions, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import {
-  Button, Dropdown, Header, Icon,
-  Text, TextField,
+  Dropdown, Header, Icon,
+  Text,
 } from "../components"
 import { colors, spacing } from "../theme"
 import DateTimePickerModal from "react-native-modal-datetime-picker"
@@ -10,8 +11,6 @@ import { formatHourMinutes } from "../utils/formatDate"
 import DocumentPicker, {
   DirectoryPickerResponse,
   DocumentPickerResponse,
-  isInProgress,
-  types,
 } from "react-native-document-picker"
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
@@ -79,8 +78,6 @@ export const AddNewEventScreen = ({ navigation }) => {
     setIsTimeStart(false)
     setTimePickerVisibility(true)
   }
-
-
 
 
   return (

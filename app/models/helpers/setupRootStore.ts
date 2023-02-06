@@ -11,7 +11,7 @@
  */
 import { applySnapshot, IDisposer, onSnapshot } from "mobx-state-tree"
 import type { RootStore } from "../RootStore"
-import * as storage from "../../utils/storage"
+import {storage} from "../../services/api/index"
 
 /**
  * The key we'll be saving our state as within async storage.

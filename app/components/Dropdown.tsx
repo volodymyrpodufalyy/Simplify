@@ -13,7 +13,7 @@ import { Icon } from "./Icon"
 import { spacing } from "../theme"
 
 
-export const Dropdown = ({ setSelected, data, defaultOption }) => {
+export const Dropdown = ({ setSelected, data }) => {
 
 
   const oldOption = React.useRef(null)
@@ -59,21 +59,7 @@ export const Dropdown = ({ setSelected, data, defaultOption }) => {
   }, [selectedval])
 
 
-  React.useEffect(() => {
-    if (!_firstRender && defaultOption && oldOption.current !== defaultOption.key) {
-      // oldOption.current != null
-      oldOption.current = defaultOption.key
-      setSelected(defaultOption.key)
-      setSelectedVal(defaultOption.value)
-    }
-    if (defaultOption && _firstRender && defaultOption.key !== undefined) {
 
-      oldOption.current = defaultOption.key
-      setSelected(defaultOption.key)
-      setSelectedVal(defaultOption.value)
-    }
-
-  }, [defaultOption])
 
 
 
