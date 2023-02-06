@@ -79,6 +79,9 @@ export const AddNewEventScreen = ({ navigation }) => {
     setIsTimeStart(false)
     setTimePickerVisibility(true)
   }
+  
+
+
 
   return (
     <View style={$container}>
