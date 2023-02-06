@@ -1,12 +1,13 @@
-import React, { useState } from "react"
+import React from "react"
 import { Dimensions, View, ViewStyle } from "react-native"
-import { AddNewEventScreen, HomeScreen } from "../screens"
+import { HomeScreen } from "../screens"
 import { ProfileScreen } from "../screens/ProfileScreen"
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native"
+import { NavigationProp } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import { Icon, IconTypes } from "../components"
 import { colors } from "../theme"
+import { AppStackParamList } from "./AppNavigator"
 
 const Tab = createBottomTabNavigator()
 
@@ -24,15 +25,25 @@ const TabBarIcon = ({
   </View>
 )
 
-export function HomeNavigator() {
-  const tabOffset = useSharedValue(0)
+const MockComponent = () => <></>
 
+export function HomeNavigator({ navigation }: { navigation: NavigationProp<AppStackParamList, "HomeNavigation"> }) {
+  const tabOffset = useSharedValue(0)
+  
   const animatedStyles = useAnimatedStyle(() => {
     return {
       transform: [{ translateX: withSpring(tabOffset.value, {}) }],
     }
   })
-
+  
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener("blur", () => {
+      tabOffset.value = 0
+    })
+    
+    return unsubscribe
+  }, [navigation])
+  
   return (
     <>
       <Tab.Navigator
@@ -55,16 +66,16 @@ export function HomeNavigator() {
           })}
         />
         <Tab.Screen
-          name="AddEvent"
-          component={AddNewEventScreen}
-
+          name="AddEventTab"
+          component={MockComponent}
           options={{
             tabBarIcon: ({ focused }) => <TabBarIcon icon={"addEvent"} focused={focused} />,
-            tabBarStyle: {display:"none"}
+            tabBarStyle: { display: "none" },
           }}
-          listeners={() => ({
-            tabPress: () => {
-              tabOffset.value = -500
+          listeners={({ navigation }) => ({
+            tabPress: (e) => {
+              e.preventDefault()
+              navigation.navigate("AddEvent")
             },
           })}
         />
@@ -90,7 +101,7 @@ export function HomeNavigator() {
 
 const $tabIndicator: ViewStyle = {
   width: getWidth() - 24,
-  height: 3,
+  height: 4,
   backgroundColor: colors.palette.primary400,
   position: "absolute",
   bottom: 98,
@@ -117,7 +128,7 @@ const $tabBar: ViewStyle = {
 
 function getWidth() {
   const width = Dimensions.get("window").width - 80
-
+  
   // Total three Tabs...
   return width / 3
 }
