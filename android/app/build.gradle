@@ -252,7 +252,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-
+    implementation platform('com.google.firebase:firebase-bom:31.2.0')
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
@@ -335,6 +335,9 @@ task copyDownloadableDepsToLibs(type: Copy) {
 
 // This method of including other gradle files is to support symlinks.
 apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json')"].execute().text.trim(), "../native_modules.gradle");
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
 applyNativeModulesAppBuildGradle(project);
 
 def isNewArchitectureEnabled() {

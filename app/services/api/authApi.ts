@@ -1,5 +1,5 @@
 import { UserByIdResponse, UserSignUpRequest } from "../../common/types/types"
-
+import auth from '@react-native-firebase/auth';
 
 export class AuthApi {
 
@@ -12,7 +12,22 @@ export class AuthApi {
   public async signUp(
     payload: UserSignUpRequest,
   ): Promise<any> {
-    console.log(payload)
+    auth()
+      .createUserWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
     return { id: "", email: "" }
   }
 }
