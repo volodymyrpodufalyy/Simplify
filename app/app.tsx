@@ -10,6 +10,8 @@ import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import { customFontsToLoad } from "./theme"
 import { setupReactotron } from "./services/reactotron"
 import Config from "./config"
+import store from './store/store'
+import { Provider } from 'react-redux'
 
 setupReactotron({
   clearOnLoad: true,
@@ -36,11 +38,14 @@ function App(props: AppProps) {
   if (!rehydrated || !areFontsLoaded) return null
 
   return (
-    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <ErrorBoundary catchErrors={Config.catchErrors}>
-        <AppNavigator />
-      </ErrorBoundary>
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+        <ErrorBoundary catchErrors={Config.catchErrors}>
+          <AppNavigator />
+        </ErrorBoundary>
+      </SafeAreaProvider>
+    </Provider>
+
   )
 }
 

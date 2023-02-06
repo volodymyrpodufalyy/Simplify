@@ -18,7 +18,7 @@ const Stack = createNativeStackNavigator()
 
 const AppStack = () => {
 
-  const isAuthenticated = true
+  const isAuthenticated = false
 
 
   return (
