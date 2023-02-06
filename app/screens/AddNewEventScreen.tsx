@@ -1,44 +1,99 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Dimensions, Image, ImageStyle, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import {
   Button, Dropdown, Header, Icon,
   Text, TextField,
 } from "../components"
 import { colors, spacing } from "../theme"
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePickerModal from "react-native-modal-datetime-picker"
+import { formatHourMinutes } from "../utils/formatDate"
+import DocumentPicker, {
+  DirectoryPickerResponse,
+  DocumentPickerResponse,
+  isInProgress,
+  types,
+} from "react-native-document-picker"
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
 export const AddNewEventScreen = ({ navigation }) => {
 
-  const category = [{ key: 1, value: "Work" },
-    { key: 2, value: "School" },
-    { key: 3, value: "Job1" },
-    { key: 4, value: "Job2" },
-    { key: 5, value: "Job3" },
-    { key: 6, value: "Job4" },
-    { key: 7, value: "Job5" },
-    { key: 8, value: "Job6" },
-  ]
+  const category = []
 
   const [selected, setSelected] = useState("")
 
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [time, setTime] = useState('1:00');
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false)
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
+  const [isTimeStart, setIsTimeStart] = useState(true)
+  const [timeStart, setTimeStart] = useState("12:00")
+  const [timeEnd, setTimeEnd] = useState("01:00")
+  const [date, setDate] = useState(new Date())
 
-  const handleConfirm = (date) => {
-    const minutes = date.getMinutes().toLocaleString()==='0'?'00':date.getMinutes().toLocaleString()
-    setTime(date.getHours().toLocaleString()+':' + minutes  )
+  const [file, setFile] = useState<
+    Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null
+  >()
+
+  const pickFile = async () => {
+    try {
+      const pickerResult = await DocumentPicker.pickSingle({
+        presentationStyle: "fullScreen",
+        copyTo: "cachesDirectory",
+        allowMultiSelection: false,
+      })
+      setFile(pickerResult)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const handleConfirmTime = (date) => {
+
+    if (isTimeStart) {
+      setTimeStart(formatHourMinutes(date))
+
+      if (formatHourMinutes(date) >= timeEnd) {
+        date.setHours(date.getHours() + 1)
+        setTimeEnd(formatHourMinutes(date))
+      }
+
+    } else {
+      setTimeEnd(formatHourMinutes(date))
+      if (formatHourMinutes(date) <= timeStart) {
+        date.setHours(date.getHours() - 1)
+        setTimeStart(formatHourMinutes(date))
+
+      }
+    }
+    setTimePickerVisibility(false)
+  }
+  const handleConfirmDate = (date) => {
+    setDate(date)
     setDatePickerVisibility(false)
-  };
+  }
+
+  const pickStartTime = () => {
+    setIsTimeStart(true)
+    setTimePickerVisibility(true)
+  }
+  const pickEndTime = () => {
+    setIsTimeStart(false)
+    setTimePickerVisibility(true)
+  }
 
   return (
     <View style={$container}>
       <DateTimePickerModal
-        isVisible={isDatePickerVisible}
+        isVisible={isTimePickerVisible}
         mode="time"
-        onConfirm={handleConfirm}
-        onCancel={()=>setDatePickerVisibility(false)}
+        onConfirm={handleConfirmTime}
+        onCancel={() => setTimePickerVisibility(false)}
+        locale="en_GB"
+      />
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirmDate}
+        onCancel={() => setDatePickerVisibility(false)}
         locale="en_GB"
       />
       <Header titleStyle={{ color: colors.palette.neutral100, fontSize: 18 }}
@@ -47,7 +102,8 @@ export const AddNewEventScreen = ({ navigation }) => {
               leftIconColor={colors.palette.neutral100}
               titleTx={"NewEventScreen.newActivity"}
               rightIcon={"check"}
-              onRightPress={()=>navigation.navigate('Home')}
+              onRightPress={() => navigation.navigate("Home")}
+              onLeftPress={() => navigation.navigate("Home")}
               rightIconColor={colors.palette.neutral100}
               containerStyle={{ borderBottomWidth: 0.5, borderColor: colors.palette.neutral800 }}
               backgroundColor={colors.palette.secondary600} />
@@ -71,12 +127,12 @@ export const AddNewEventScreen = ({ navigation }) => {
         </View>
         <View style={$sectionContainer}>
           <View style={$sectionTime}>
-            <TouchableOpacity onPress={()=>setDatePickerVisibility(true)}>
-              <Text text={"1:00"} style={{ color: "white" }} size={"md"} />
+            <TouchableOpacity onPress={pickStartTime}>
+              <Text text={timeStart} style={{ color: "white" }} size={"md"} />
             </TouchableOpacity>
             <Text text={" - "} style={{ color: "white" }} size={"md"} />
-            <TouchableOpacity>
-              <Text text={"12:00"} style={{ color: "white" }} size={"md"} />
+            <TouchableOpacity onPress={pickEndTime}>
+              <Text text={timeEnd} style={{ color: "white" }} size={"md"} />
             </TouchableOpacity>
           </View>
         </View>
@@ -85,18 +141,30 @@ export const AddNewEventScreen = ({ navigation }) => {
             <Icon icon={"calendar"} color={"white"} size={28} />
           </TouchableOpacity>
           <View style={$sectionText}>
-            <TouchableOpacity>
-              <Text text={"Nov 1, 2023"} style={{ color: "white" }} size={"md"} />
-
+            <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
+              <Text text={date.toLocaleDateString()} style={{ color: "white" }} size={"md"} />
             </TouchableOpacity>
           </View>
         </View>
         <View style={$sectionContainer}>
           <TouchableOpacity><Icon icon={"attach"} color={"white"} size={30} /></TouchableOpacity>
           <View style={$sectionText}>
-            <TouchableOpacity>
-              <Text tx={"NewEventScreen.attach"} style={{ color: "white" }} size={"md"} />
-            </TouchableOpacity>
+            {!file ? <TouchableOpacity onPress={pickFile}>
+                <Text tx={"NewEventScreen.attach"} style={{ color: "white" }} size={"md"} />
+              </TouchableOpacity> :
+              <View style={$file}>
+                <Icon icon={"file"} size={40} color={"white"} style={{ marginRight: 10 }} />
+                <View>
+                  <Text text={file?.name} style={{ color: "white", maxWidth: 150 }} numberOfLines={1} size={"md"} />
+                  <Text text={(file.size * 0.001).toString() + " KB"} style={{ color: "white" }} size={"xs"} />
+                </View>
+                <TouchableOpacity onPress={() => {
+                  setFile(null)
+                }}>
+                  <Icon icon={"cross"} size={20} color={"white"} style={{ marginLeft: 20 }} />
+                </TouchableOpacity>
+              </View>
+            }
           </View>
         </View>
         <TouchableOpacity style={$sectionContainer}>
@@ -108,6 +176,16 @@ export const AddNewEventScreen = ({ navigation }) => {
 
     </View>
   )
+}
+
+const $file: ViewStyle = {
+
+  height: 50,
+
+  maxWidth: 250,
+  alignItems: "center",
+  width: "100%",
+  flexDirection: "row",
 }
 
 const $container: ViewStyle = {

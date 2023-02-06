@@ -99,6 +99,8 @@ export const iconRegistry = {
   attach: require("../../assets/icons/attach.png"),
   plus: require("../../assets/icons/plus.png"),
   chevron: require("../../assets/icons/chevron.png"),
+  cross: require("../../assets/icons/cross.png"),
+  file: require("../../assets/icons/file.png"),
   bell: require("../../assets/icons/bell.png"),
   caretLeft: require("../../assets/icons/caretLeft.png"),
   caretRight: require("../../assets/icons/caretRight.png"),
