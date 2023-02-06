@@ -4,11 +4,13 @@ import { Header } from "../components"
 import { colors, spacing, typography } from "../theme"
 import { Calendar, CalendarProvider } from "react-native-calendars"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { rootReducer, useAppSelector } from "../store/store"
 
 export const HomeScreen = () => {
   const [heightCalendar, setHeightCalendar] = useState(1)
   const date = new Date()
-
+  const { user } = useAppSelector((state: rootReducer) => state.AuthReducer)
+  console.log(user)
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

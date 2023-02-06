@@ -9,7 +9,7 @@ import {
 } from "react-native"
 import { Button, Icon, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { colors, spacing } from "../theme"
-import { useAppDispatch } from "../store/store"
+import { rootReducer, useAppDispatch, useAppSelector } from "../store/store"
 import { signUp } from "../store/auth/action"
 
 const coffee = require("../../assets/images/coffe.png")
@@ -26,11 +26,13 @@ export const SignupScreen = ({navigation}) => {
   const [authEmail, setAuthEmail] = useState("")
   const [authPassword, setAuthPassword] = useState("")
 
+  const { error } = useAppSelector((state: rootReducer) => state.AuthReducer)
 
   const dispatch = useAppDispatch()
-  function login() {
-
-    dispatch(signUp({email:authEmail, password:authPassword }))
+  const signUpHandler=()=> {
+    if (authEmail !== '' && authPassword !== '') {
+      dispatch(signUp({ email: authEmail, password: authPassword }))
+    }
   }
 
   const PasswordRightAccessory = useMemo(
@@ -73,8 +75,8 @@ export const SignupScreen = ({navigation}) => {
           keyboardType="email-address"
           labelTx="loginScreen.emailFieldLabel"
           placeholderTx="loginScreen.emailFieldPlaceholder"
-          // helper={errors?.authEmail}
-          // status={errors?.authEmail ? "error" : undefined}
+          helper={error?.authEmail}
+          status={error ? "error" : undefined}
           onSubmitEditing={() => authPasswordInput.current?.focus()}
         />
 
@@ -91,7 +93,7 @@ export const SignupScreen = ({navigation}) => {
           placeholderTx="loginScreen.passwordFieldPlaceholder"
           // helper={errors?.authPassword}
           // status={errors?.authPassword ? "error" : undefined}
-          onSubmitEditing={login}
+          onSubmitEditing={signUpHandler}
           RightAccessory={PasswordRightAccessory}
         />
 
@@ -100,7 +102,7 @@ export const SignupScreen = ({navigation}) => {
           tx="loginScreen.tapToSignUp"
           style={$tapButton}
           preset="reversed"
-          onPress={login}
+          onPress={signUpHandler}
         />
       </View>
       <Text tx={"loginScreen.or"} style={{ textAlign: "center", marginTop: 10 }} />
