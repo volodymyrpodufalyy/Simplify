@@ -12,14 +12,15 @@ export class AuthApi {
   public async signUp(
     payload: UserSignUpRequest,
   ): Promise<any> {
+
     auth()
-      .createUserWithEmailAndPassword('jane.doe@example.com', 'SuperSecretPassword!')
+      .createUserWithEmailAndPassword(payload.email, payload.password)
       .then(() => {
-        console.log('User account created & signed in!');
+        return { id: "", email: "" }
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
-          console.log('That email address is already in use!');
+          throw Error( 'That email address is already in use!');
         }
 
         if (error.code === 'auth/invalid-email') {
@@ -28,6 +29,6 @@ export class AuthApi {
 
         console.error(error);
       });
-    return { id: "", email: "" }
+
   }
 }

@@ -29,10 +29,10 @@ export type AppStackParamList = {
 const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = () => {
-  
-  const isAuthenticated = true
-  
-  
+
+const isAuthenticated = false
+
+
   return (
     <Stack.Navigator
       screenOptions={() => {

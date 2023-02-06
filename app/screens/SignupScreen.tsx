@@ -9,6 +9,8 @@ import {
 } from "react-native"
 import { Button, Icon, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { colors, spacing } from "../theme"
+import { useAppDispatch } from "../store/store"
+import { signUp } from "../store/auth/action"
 
 const coffee = require("../../assets/images/coffe.png")
 const google = require("../../assets/images/google.png")
@@ -24,8 +26,11 @@ export const SignupScreen = ({navigation}) => {
   const [authEmail, setAuthEmail] = useState("")
   const [authPassword, setAuthPassword] = useState("")
 
+
+  const dispatch = useAppDispatch()
   function login() {
-    console.log("login")
+
+    dispatch(signUp({email:authEmail, password:authPassword }))
   }
 
   const PasswordRightAccessory = useMemo(
