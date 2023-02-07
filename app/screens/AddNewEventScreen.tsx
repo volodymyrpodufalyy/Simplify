@@ -14,9 +14,11 @@ import DocumentPicker, {
 } from "react-native-document-picker"
 import eventsApi from "../services/api/eventsApi"
 import { Event, EventCategory } from "../common/types/types"
-import { useAppSelector } from "../store/store"
+import { useAppDispatch, useAppSelector } from "../store/store"
 import { dateToTimestamp } from "../utils/date"
 import { CATEGORIES } from "../common/constants"
+
+
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
@@ -40,6 +42,7 @@ export const AddNewEventScreen = ({ navigation }) => {
     Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null
   >()
 
+  const dispatch = useAppDispatch()
   const pickFile = async () => {
     try {
       const pickerResult = await DocumentPicker.pickSingle({
@@ -89,18 +92,22 @@ export const AddNewEventScreen = ({ navigation }) => {
 
   const { user } = useAppSelector((state) => state.AuthReducer)
 
-  const saveEvent = () => {
+  const  saveEvent = async () => {
     if (selected !== "" && name !== "") {
+      let url = null
+      if (file) {
+        url = await eventsApi.uploadFile(file)
+      }
       const event: Event = {
         category: selected,
         endDate: dateToTimestamp(timeStart),
-        files: [],
+        files: url?[url]:[],
         name,
         people: [],
         startDate: dateToTimestamp(timeStart),
         userId: user.uid,
       }
-      eventsApi.addEvent(event)
+      await eventsApi.addEvent(event)
       navigation.navigate("Home")
     }else{
       name === ""?alert('Name is required'):alert('Category is required')
@@ -193,8 +200,10 @@ export const AddNewEventScreen = ({ navigation }) => {
                 }}>
                   <Icon icon={"cross"} size={20} color={"white"} style={{ marginLeft: 20 }} />
                 </TouchableOpacity>
+
               </View>
             }
+            {/* <Text style={{color:'white'}}>File uploaded</Text> */}
           </View>
         </View>
         <TouchableOpacity style={$sectionContainer}>

@@ -8,8 +8,8 @@ import { useAppSelector } from "../store/store"
 
 export const HomeScreen = () => {
   const { user } = useAppSelector((state) => state.AuthReducer)
-  console.log(user)
-  
+
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={$container}>
