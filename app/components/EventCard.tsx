@@ -33,7 +33,7 @@ export const EventCard = (props: EventCardProps) => {
             <Text style={$eventCategoryText}>{event.category}</Text>
           </View> : null}
         <View style={$timeContainer}>
-          {event.files? <Icon icon={"file"} size={18} style={{marginRight:5}} />: null}
+          {event.files.length>=1? <Icon icon={"file"} size={18} style={{marginRight:5}} />: null}
           <Icon icon={"clock"} size={18}/>
           <Text style={$eventDateText}>{formatHourMinutes(startDate)}-{formatHourMinutes(endDate)}</Text>
         </View>

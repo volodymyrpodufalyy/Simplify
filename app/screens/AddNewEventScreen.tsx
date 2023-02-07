@@ -57,8 +57,6 @@ export const AddNewEventScreen = ({ navigation }) => {
       setTimeEnd(timestampToDate(currentEvent.endDate))
       setDate(timestampToDate(currentEvent.startDate))
     }
-
-
   }, [currentEvent])
   const pickFile = async () => {
     try {
@@ -138,9 +136,9 @@ export const AddNewEventScreen = ({ navigation }) => {
     } else {
       name === "" ? alert("Name is required") : alert("Category is required")
     }
-    
+
   }
-  
+
   const backToHome = () => {
     dispatch(setCurrentEvent(null))
     navigation.navigate("Home")
@@ -237,14 +235,28 @@ export const AddNewEventScreen = ({ navigation }) => {
                     }}>
                       <Icon icon={"cross"} size={20} color={"white"} style={{ marginLeft: 20 }} />
                     </TouchableOpacity>
-                  
                   </View>
                 }
               </>
             ) : (
-              <TouchableOpacity onPress={() => openFile(currentEvent?.files[0])}>
-                <Text style={{ color: "white" }}>Files({currentEvent.files.length})</Text>
-              </TouchableOpacity>
+              <View>
+                <Text style={{ color: "white", marginBottom:5 }}>Files({currentEvent.files.length})</Text>
+                {currentEvent.files.length >=1?
+                  <TouchableOpacity style={$file} onPress={() => openFile(currentEvent?.files[0])}>
+                    <Icon icon={"file"} size={40} color={"white"} style={{ marginRight: 10 }} />
+                    <View>
+                      {/* @ts-ignore */}
+                      <Text text={'File'} style={{ color: "white", maxWidth: 150 }} numberOfLines={1} size={"md"} />
+                      {/* @ts-ignore */}
+                    </View>
+                    <TouchableOpacity onPress={() => {
+                      setFile(null)
+                    }}>
+                      <Icon icon={"cross"} size={20} color={"white"} style={{ marginLeft: 20 }} />
+                    </TouchableOpacity>
+                  </TouchableOpacity>:null
+                }
+              </View>
             )}
           </View>
         </View>
@@ -277,7 +289,7 @@ const $container: ViewStyle = {
 
 const $inputName: TextStyle = {
   paddingHorizontal: spacing.medium,
-  
+
   color: colors.palette.neutral100,
   fontSize: 18,
 }
@@ -324,7 +336,7 @@ const $sectionText: ViewStyle = {
   marginLeft: spacing.medium,
   paddingVertical: spacing.small,
   borderColor: colors.palette.neutral600,
-  
+
 }
 
 const $sectionTime: ViewStyle = {
