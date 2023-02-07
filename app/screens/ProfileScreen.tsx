@@ -12,19 +12,26 @@ import {
 import { colors, spacing, typography } from "../theme"
 import React from "react"
 import { Icon } from "../components"
+import { rootReducer, useAppDispatch, useAppSelector } from "../store/store"
+import { logOut } from "../store/auth/action"
 
 const welcomeFace = require("../../assets/images/welcome-image.png")
 
 export const ProfileScreen = () => {
+
+  const dispatch = useAppDispatch()
+
+  const { user } = useAppSelector((state: rootReducer) => state.AuthReducer)
+
   return (
     <SafeAreaView style={$container}>
       <View style={$topContainer}>
-        <TouchableOpacity style={{position:'absolute', right:20, top:20,}}>
+        <TouchableOpacity onPress={()=>dispatch(logOut([]))} style={{position:'absolute', right:20, top:20,}}>
           <Icon icon={'exit'} size={22}/>
         </TouchableOpacity>
         <View style={$profileCard}>
           <Image source={welcomeFace} style={$userImage} />
-          <Text style={$username}>Hello @username!</Text>
+          <Text style={$username}>Hello {user?.email.split('@')[0]}!</Text>
         </View>
 
       </View>
@@ -40,7 +47,7 @@ export const ProfileScreen = () => {
           <Icon icon={"calendar"} color={"white"} size={28} />
           <View style={$sectionText}>
             <Text style={{ color: "white", fontSize: 18,  }}>Email:</Text>
-            <TextInput value={"asdsd@gmail.com"} style={{ padding:0, paddingVertical:5, color: colors.palette.neutral400, fontSize: 18 }} />
+            <TextInput value={user?.email} style={{ padding:0, paddingVertical:5, color: colors.palette.neutral400, fontSize: 18 }} />
           </View>
         </View>
       </View>

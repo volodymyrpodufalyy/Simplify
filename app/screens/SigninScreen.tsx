@@ -9,6 +9,8 @@ import {
 } from "react-native"
 import { Button, Icon, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { colors, spacing } from "../theme"
+import { rootReducer, useAppDispatch, useAppSelector } from "../store/store"
+import { clearErrors, signIn } from "../store/auth/action"
 
 const welcome = require("../../assets/images/WelcomeBack.png")
 const google = require("../../assets/images/google.png")
@@ -24,9 +26,21 @@ export const SignInScreen = ({ navigation }) => {
   const [attemptsCount, setAttemptsCount] = useState(0)
   const [authEmail, setAuthEmail] = useState("")
   const [authPassword, setAuthPassword] = useState("")
+  const dispatch = useAppDispatch()
+  const { error } = useAppSelector((state: rootReducer) => state.AuthReducer)
 
   function login() {
-    console.log("login")
+    dispatch(signIn({ email: authEmail, password: authPassword }))
+  }
+
+  const onChangeEmail = (text) => {
+    setAuthEmail(text)
+    dispatch(clearErrors())
+  }
+
+  const onChangePassword = (text) => {
+    setAuthPassword(text)
+    dispatch(clearErrors())
   }
 
   const PasswordRightAccessory = useMemo(
@@ -57,7 +71,7 @@ export const SignInScreen = ({ navigation }) => {
 
         <TextField
           value={authEmail}
-          onChangeText={setAuthEmail}
+          onChangeText={onChangeEmail}
           containerStyle={$textField}
           autoCapitalize="none"
           autoComplete="email"
@@ -65,15 +79,15 @@ export const SignInScreen = ({ navigation }) => {
           keyboardType="email-address"
           labelTx="loginScreen.emailFieldLabel"
           placeholderTx="loginScreen.emailFieldPlaceholder"
-          // helper={errors?.authEmail}
-          // status={errors?.authEmail ? "error" : undefined}
+          helper={error?.emailErrorMsg}
+          status={error?.emailErrorMsg ? "error" : undefined}
           onSubmitEditing={() => authPasswordInput.current?.focus()}
         />
 
         <TextField
           ref={authPasswordInput}
           value={authPassword}
-          onChangeText={setAuthPassword}
+          onChangeText={onChangePassword}
           containerStyle={$textField}
           autoCapitalize="none"
           autoComplete="password"
@@ -81,8 +95,8 @@ export const SignInScreen = ({ navigation }) => {
           secureTextEntry={isAuthPasswordHidden}
           labelTx="loginScreen.passwordFieldLabel"
           placeholderTx="loginScreen.passwordFieldPlaceholder"
-          // helper={errors?.authPassword}
-          // status={errors?.authPassword ? "error" : undefined}
+          helper={error?.passwordErrorMsg}
+          status={error?.passwordErrorMsg ? "error" : undefined}
           onSubmitEditing={login}
           RightAccessory={PasswordRightAccessory}
         />

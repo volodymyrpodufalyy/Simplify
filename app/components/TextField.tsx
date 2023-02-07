@@ -253,7 +253,7 @@ const $inputStyle: TextStyle = {
 }
 
 const $helperStyle: TextStyle = {
-  marginTop: spacing.extraSmall,
+  marginTop: 0,
 }
 
 const $rightAccessoryStyle: ViewStyle = {
