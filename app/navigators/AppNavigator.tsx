@@ -6,7 +6,7 @@ import {
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React, { useEffect } from "react"
-import { useColorScheme } from "react-native"
+import { StatusBar, useColorScheme } from "react-native"
 import Config from "../config"
 import { AddNewEventScreen, SignInScreen, SignupScreen, WelcomeScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
@@ -37,7 +37,7 @@ const AppStack = () => {
     dispatch(getCurrentUser([]))
   }, [])
   
-  const { user } = useAppSelector((state: rootReducer) => state.AuthReducer)
+  const { user } = useAppSelector((state) => state.AuthReducer)
   
   const isAuthenticated = Boolean(user)
   
@@ -51,7 +51,6 @@ const AppStack = () => {
       }}
       initialRouteName={"Welcome"}
     >
-      
       {isAuthenticated ? (
         <>
           <Stack.Group>
@@ -69,7 +68,6 @@ const AppStack = () => {
         
         </>
       )}
-    
     </Stack.Navigator>
   )
 }

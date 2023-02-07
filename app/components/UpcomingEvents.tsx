@@ -8,11 +8,15 @@ import { EventCard } from "./EventCard"
 import auth from "@react-native-firebase/auth"
 import { CATEGORIES } from "../common/constants"
 import { Filter } from "./Filter"
+import { useAppSelector } from "../store/store"
+import { timestampToDate } from "../utils/date"
 
 export const UpcomingEvents = () => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [events, setEvents] = useState<Event[]>([])
   const [categoryFilter, setCategoryFilter] = useState("")
+  
+  const { selectedDate } = useAppSelector((state) => state.EventsReducer)
   
   const user = auth().currentUser
   
@@ -30,14 +34,14 @@ export const UpcomingEvents = () => {
               key: documentSnapshot.id,
             })
           })
-          setEvents(result)
+          setEvents(result.filter((el) => timestampToDate(el.startDate).toDateString() === selectedDate.toDateString()))
           setLoading(false)
         }
       })
     
     // Unsubscribe from events when no longer in use
     return () => subscriber()
-  }, [])
+  }, [selectedDate])
   
   const filteredEvents = useMemo(() => {
     if (categoryFilter && categoryFilter !== "All")
@@ -53,7 +57,7 @@ export const UpcomingEvents = () => {
     <View style={$container}>
       <Text style={$upcomingEventsTitle}>Upcoming events</Text>
       {!loading ?
-        <View style={{ flex: 1 }}>
+        <View style={$wrapper}>
           <View style={{ height: 70 }}>
             <ScrollView horizontal={true} style={$filters}>
               {["All", ...CATEGORIES].map((i) =>
@@ -64,6 +68,7 @@ export const UpcomingEvents = () => {
             </ScrollView>
           </View>
           <FlashList
+            contentContainerStyle={{ paddingBottom: 70 }}
             data={filteredEvents}
             renderItem={({ item }) => (
               <EventCard event={item} />
@@ -72,7 +77,7 @@ export const UpcomingEvents = () => {
           />
         </View>
         :
-        <ActivityIndicator />
+        <ActivityIndicator color={colors.palette.neutral100} />
       }
     </View>
   )
@@ -83,6 +88,11 @@ const $container: ViewStyle = {
   backgroundColor: colors.palette.neutral750,
   borderTopLeftRadius: 25,
   borderTopRightRadius: 25,
+}
+
+const $wrapper: ViewStyle = {
+  flex: 1,
+  maxHeight: "100%",
 }
 
 const $filters: ViewStyle = {
@@ -98,5 +108,4 @@ const $upcomingEventsTitle: TextStyle = {
   ...typography.primary,
   textAlign: "center",
   paddingTop: spacing.medium,
-  marginBottom: 20,
 }

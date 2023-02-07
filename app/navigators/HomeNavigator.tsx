@@ -45,7 +45,7 @@ export function HomeNavigator({ navigation }: { navigation: NavigationProp<AppSt
   }, [navigation])
   
   return (
-    <>
+    <View style={{ flex: 1, zIndex: 0, backgroundColor: "#fff" }}>
       <Tab.Navigator
         screenOptions={{
           headerShown: false,
@@ -95,27 +95,28 @@ export function HomeNavigator({ navigation }: { navigation: NavigationProp<AppSt
         />
       </Tab.Navigator>
       <Animated.View style={[$tabIndicator, animatedStyles]} />
-    </>
+    </View>
   )
 }
+
 
 const $tabIndicator: ViewStyle = {
   width: getWidth() - 24,
   height: 4,
-  backgroundColor: colors.palette.primary400,
+  backgroundColor: colors.palette.angry500,
   position: "absolute",
-  bottom: 98,
+  bottom: 73,
   left: 50,
   borderRadius: 30,
-  zIndex: 5,
+  zIndex: 1,
 }
 
 const $tabBar: ViewStyle = {
   backgroundColor: "white",
   position: "absolute",
-  bottom: 40,
+  bottom: 25,
   marginHorizontal: 20,
-  height: 60,
+  height: 50,
   borderRadius: 30,
   shadowColor: "white",
   shadowOpacity: 0.06,
@@ -124,6 +125,7 @@ const $tabBar: ViewStyle = {
     height: 5,
   },
   paddingBottom: 0,
+  zIndex: 5,
 }
 
 function getWidth() {
