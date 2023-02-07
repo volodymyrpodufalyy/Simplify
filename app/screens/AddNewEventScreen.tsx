@@ -16,12 +16,13 @@ import eventsApi from "../services/api/eventsApi"
 import { Event, EventCategory } from "../common/types/types"
 import { useAppSelector } from "../store/store"
 import { dateToTimestamp } from "../utils/date"
+import { CATEGORIES } from "../common/constants"
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
 export const AddNewEventScreen = ({ navigation }) => {
 
-  const category = [{ key: 1, value: "Birthday" }]
+  const category = CATEGORIES.map((value, index) => ({ key: index, value }))
 
   const [selected, setSelected] = useState("")
 
@@ -89,19 +90,22 @@ export const AddNewEventScreen = ({ navigation }) => {
   const { user } = useAppSelector((state) => state.AuthReducer)
 
   const saveEvent = () => {
-
-    const event: Event = {
-      category: selected,
-      endDate: dateToTimestamp(timeStart),
-      files: [],
-      name,
-      people: [],
-      startDate: dateToTimestamp(timeStart),
-      userId: user.uid,
+    if (selected !== "" && name !== "") {
+      const event: Event = {
+        category: selected,
+        endDate: dateToTimestamp(timeStart),
+        files: [],
+        name,
+        people: [],
+        startDate: dateToTimestamp(timeStart),
+        userId: user.uid,
+      }
+      eventsApi.addEvent(event)
+      navigation.navigate("Home")
+    }else{
+      name === ""?alert('Name is required'):alert('Category is required')
     }
 
-    eventsApi.addEvent(event)
-    navigation.navigate('Home')
   }
 
   return (

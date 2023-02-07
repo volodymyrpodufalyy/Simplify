@@ -109,14 +109,14 @@ export const Dropdown = ({ setSelected, data }) => {
                   :
                   null
               }
-              <View style={[styles.addCategory]}>
-                <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }}>
+              {/* <View style={[styles.addCategory]}> */}
+              {/*   <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }}> */}
 
-                  <Icon icon={"plus"} color={"white"} size={20} />
-                  <Text style={{ color: "white", fontSize: 18, paddingLeft: 10 }}>Add a new category</Text>
+              {/*     <Icon icon={"plus"} color={"white"} size={20} /> */}
+              {/*     <Text style={{ color: "white", fontSize: 18, paddingLeft: 10 }}>Add a new category</Text> */}
 
-                </TouchableOpacity>
-              </View>
+              {/*   </TouchableOpacity> */}
+              {/* </View> */}
             </ScrollView>
           </Animated.View>
           :
