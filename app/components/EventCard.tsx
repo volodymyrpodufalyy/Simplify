@@ -27,9 +27,10 @@ export const EventCard = (props: EventCardProps) => {
         <Text style={$eventNameText}>{event.name}</Text>
       </View>
       <View style={$halfContainer}>
-        <View style={$eventCategory}>
-          <Text style={$eventCategoryText}>{event.category}</Text>
-        </View>
+        {event.category ?
+          <View style={$eventCategory}>
+            <Text style={$eventCategoryText}>{event.category}</Text>
+          </View> : null}
         <View style={$timeContainer}>
           <Icon icon={"clock"} />
           <Text style={$eventDateText}>{startDate} - {endDate}</Text>

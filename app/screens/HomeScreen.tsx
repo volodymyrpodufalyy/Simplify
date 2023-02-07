@@ -15,9 +15,7 @@ export const HomeScreen = () => {
   const dispatch = useAppDispatch()
   
   const onDayPress = (day: DateData) => {
-    console.log(day, "day")
     dispatch(setDate(new Date(day.dateString)))
-    
   }
   
   const selectedDay = format(selectedDate, "yyyy-MM-dd")
