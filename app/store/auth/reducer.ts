@@ -2,6 +2,7 @@ import { createReducer } from "@reduxjs/toolkit"
 import { DataStatus } from "../../common/enums/enums"
 import { UserByIdResponse } from "../../common/types/UserByIdResponse"
 import { clearErrors, getCurrentUser, logOut, signIn, signUp } from "./action"
+import { authApi } from "../../services/api"
 
 type State = {
   dataStatus: DataStatus;
@@ -22,6 +23,9 @@ const reducer = createReducer(initialState, (builder) => {
   builder.addCase(signUp.fulfilled, (state, action) => {
     state.dataStatus = DataStatus.FULFILLED
     state.user = action.payload.user
+    if(action.payload.user!==null){
+      authApi.addUserToCollection(action.payload.user)
+    }
     state.error = action.payload.error
   })
   builder.addCase(signIn.fulfilled, (state, action) => {

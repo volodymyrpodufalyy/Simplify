@@ -10,6 +10,7 @@ import { CATEGORIES } from "../common/constants"
 import { Filter } from "./Filter"
 import { useAppSelector } from "../store/store"
 import { timestampToDate } from "../utils/date"
+import eventsApi from "../services/api/eventsApi"
 
 export const UpcomingEvents = ({openEvent}) => {
   const [loading, setLoading] = useState(true)
@@ -19,6 +20,7 @@ export const UpcomingEvents = ({openEvent}) => {
   const { selectedDate } = useAppSelector((state) => state.EventsReducer)
 
   const user = auth().currentUser
+
 
   useEffect(() => {
     const subscriber = firestore()
@@ -34,7 +36,11 @@ export const UpcomingEvents = ({openEvent}) => {
               key: documentSnapshot.id,
             })
           })
+
           setEvents(result.filter((el) => timestampToDate(el.startDate).toDateString() === selectedDate.toDateString()))
+          eventsApi.getNotMyEvents(user).then(value => setEvents([...result, ...value]))
+          setEvents(events.filter((el) => timestampToDate(el.startDate).toDateString() === selectedDate.toDateString()))
+
           setLoading(false)
         }
       })

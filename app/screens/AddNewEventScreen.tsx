@@ -21,6 +21,9 @@ import { addHours } from "date-fns"
 import { setCurrentEvent } from "../store/event/action"
 import { current } from "@reduxjs/toolkit"
 import { openFile } from "../utils/openFile"
+import { DropdownMultiSelect } from "../components/DropdownMultiSelect"
+import { authApi } from "../services/api"
+
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
@@ -44,18 +47,26 @@ export const AddNewEventScreen = ({ navigation }) => {
 
   const [date, setDate] = useState(selectedDate)
   const [name, setName] = useState("")
+  const [selectedPeoples, setSelectedPeoples] = useState<string[]>([])
 
   const [file, setFile] = useState<
     Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null
   >()
+  const [users, setUsers] = useState([])
+  useEffect(()=>{
+    eventsApi.getUsers().then(value => setUsers(value))
+  },[])
+
 
   useEffect(()=>{
+    console.log(currentEvent)
     if (currentEvent){
       setName(currentEvent.name)
       setSelected(currentEvent.category)
       setTimeStart(timestampToDate(currentEvent.startDate))
       setTimeEnd(timestampToDate(currentEvent.endDate))
       setDate(timestampToDate(currentEvent.startDate))
+      setSelectedPeoples(currentEvent?.people)
     }
   }, [currentEvent])
   const pickFile = async () => {
@@ -95,7 +106,6 @@ export const AddNewEventScreen = ({ navigation }) => {
     setDate(date)
     setDatePickerVisibility(false)
   }
-
   const pickStartTime = () => {
     setIsTimeStart(true)
     setTimePickerVisibility(true)
@@ -121,8 +131,9 @@ export const AddNewEventScreen = ({ navigation }) => {
         endDate: dateToTimestamp(replaceTimeInDate(date, timeEnd)),
         files: url ? [url] : [],
         name,
-        people: [],
+        people: selectedPeoples,
         userId: user.uid,
+        userEmail: user.email
       }
 
       if (currentEvent) {
@@ -136,14 +147,13 @@ export const AddNewEventScreen = ({ navigation }) => {
     } else {
       name === "" ? alert("Name is required") : alert("Category is required")
     }
-
   }
-
   const backToHome = () => {
     dispatch(setCurrentEvent(null))
     navigation.navigate("Home")
   }
 
+  // @ts-ignore
   BackHandler.addEventListener("hardwareBackPress", function() {
     dispatch(setCurrentEvent(null))
   })
@@ -262,9 +272,12 @@ export const AddNewEventScreen = ({ navigation }) => {
         </View>
         <TouchableOpacity style={$sectionContainer}>
           <Icon icon={"peoples"} color={"white"} size={30} />
-          <TextInput style={$inputName} placeholder={"Add peoples for event"}
-                     placeholderTextColor={colors.palette.neutral400} />
+
+          <DropdownMultiSelect users={users} setSelected={setSelectedPeoples} selected={selectedPeoples}/>
         </TouchableOpacity>
+        <View>
+
+        </View>
       </View>
 
     </View>

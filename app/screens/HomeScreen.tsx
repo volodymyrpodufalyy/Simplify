@@ -11,7 +11,7 @@ import { DateData } from "react-native-calendars/src/types"
 import { setCurrentEvent } from "../store/event/action"
 
 export const HomeScreen = ({navigation}) => {
-  const { user } = useAppSelector((state) => state.AuthReducer)
+
 
   const { selectedDate } = useAppSelector(state => state.EventsReducer)
   const dispatch = useAppDispatch()
