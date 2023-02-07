@@ -2,12 +2,13 @@ import { configureStore } from "@reduxjs/toolkit"
 import { rootReducer } from "./rootReducer"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
 import { authApi, storage } from "../services/api"
+import eventsApi from "../services/api/eventsApi"
 
 /**
  * Place to add enhancers
  */
 const enhancers = []
-const extraArgument = { authApi, storage }
+const extraArgument = { authApi, storage, eventsApi }
 
 // toolkit includes redux-thunk by default, and enables use of the Redux DevTools Extension.
 const store = configureStore({
