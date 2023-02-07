@@ -1,11 +1,13 @@
-import { ActivityIndicator, Text, TextStyle, View, ViewStyle } from "react-native"
+import { ActivityIndicator, ScrollView, Text, TextStyle, View, ViewStyle } from "react-native"
 import { colors, spacing, typography } from "../theme"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { FlashList } from "@shopify/flash-list"
 import firestore from "@react-native-firebase/firestore"
-import type { Event } from "../common/types/Events"
+import type { Event, EventCategory } from "../common/types/Events"
 import { EventCard } from "./EventCard"
 import auth from "@react-native-firebase/auth"
+import { CATEGORIES } from "../common/constants"
+import { Filter } from "./Filter"
 
 export const UpcomingEvents = () => {
   const [loading, setLoading] = useState(false)
@@ -38,22 +40,37 @@ export const UpcomingEvents = () => {
   }, [])
   
   const filteredEvents = useMemo(() => {
-    if (categoryFilter)
-      return events.filter(event => event.category == categoryFilter)
+    if (categoryFilter && categoryFilter !== "All")
+      return events.filter(event => event.category === categoryFilter)
     else return events
-  }, [events])
+  }, [events, categoryFilter])
+  
+  const onFilterPress = useCallback((e: string) => {
+    setCategoryFilter(e)
+  }, [])
   
   return (
     <View style={$container}>
       <Text style={$upcomingEventsTitle}>Upcoming events</Text>
       {!loading ?
-        <FlashList
-          data={events}
-          renderItem={({ item }) => (
-            <EventCard event={item} />
-          )}
-          estimatedItemSize={10}
-        />
+        <View style={{ flex: 1 }}>
+          <View style={{ height: 70 }}>
+            <ScrollView horizontal={true} style={$filters}>
+              {["All", ...CATEGORIES].map((i) =>
+                <Filter
+                  onPress={() => onFilterPress(i)} key={i}
+                  category={i as EventCategory} />,
+              )}
+            </ScrollView>
+          </View>
+          <FlashList
+            data={filteredEvents}
+            renderItem={({ item }) => (
+              <EventCard event={item} />
+            )}
+            estimatedItemSize={10}
+          />
+        </View>
         :
         <ActivityIndicator />
       }
@@ -66,6 +83,13 @@ const $container: ViewStyle = {
   backgroundColor: colors.palette.neutral750,
   borderTopLeftRadius: 25,
   borderTopRightRadius: 25,
+}
+
+const $filters: ViewStyle = {
+  marginHorizontal: 30,
+  marginVertical: 10,
+  paddingRight: 40,
+  flexDirection: "row",
 }
 
 const $upcomingEventsTitle: TextStyle = {
