@@ -13,7 +13,7 @@ export interface Event {
   startDate: FirebaseFirestoreTypes.Timestamp;
   endDate: FirebaseFirestoreTypes.Timestamp;
   userId: string;
-  category?: EventCategory;
+  category?: any;
   people: string[];
   files: string[];
 }

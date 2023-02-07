@@ -12,21 +12,27 @@ import DocumentPicker, {
   DirectoryPickerResponse,
   DocumentPickerResponse,
 } from "react-native-document-picker"
+import eventsApi from "../services/api/eventsApi"
+import { Event, EventCategory } from "../common/types/types"
+import { useAppSelector } from "../store/store"
+import { dateToTimestamp } from "../utils/date"
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
 export const AddNewEventScreen = ({ navigation }) => {
 
-  const category = []
-
+  const category = [{key:1, value:'Birthday'}]
+  const currentDate = new Date()
   const [selected, setSelected] = useState("")
 
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false)
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
   const [isTimeStart, setIsTimeStart] = useState(true)
-  const [timeStart, setTimeStart] = useState("12:00")
-  const [timeEnd, setTimeEnd] = useState("01:00")
+  const [timeStart, setTimeStart] = useState(currentDate)
+
+  const [timeEnd, setTimeEnd] = useState(currentDate)
   const [date, setDate] = useState(new Date())
+  const [name, setName] = useState('')
 
   const [file, setFile] = useState<
     Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null
@@ -48,18 +54,17 @@ export const AddNewEventScreen = ({ navigation }) => {
   const handleConfirmTime = (date) => {
 
     if (isTimeStart) {
-      setTimeStart(formatHourMinutes(date))
-
-      if (formatHourMinutes(date) >= timeEnd) {
+      setTimeStart(date)
+      if (date >= timeEnd) {
         date.setHours(date.getHours() + 1)
-        setTimeEnd(formatHourMinutes(date))
+        setTimeEnd(date)
       }
 
     } else {
-      setTimeEnd(formatHourMinutes(date))
-      if (formatHourMinutes(date) <= timeStart) {
+      setTimeEnd(date)
+      if (date <= timeStart) {
         date.setHours(date.getHours() - 1)
-        setTimeStart(formatHourMinutes(date))
+        setTimeStart(date)
 
       }
     }
@@ -79,6 +84,23 @@ export const AddNewEventScreen = ({ navigation }) => {
     setTimePickerVisibility(true)
   }
 
+  const { user } = useAppSelector((state) => state.AuthReducer)
+
+  const saveEvent = () => {
+    // console.log(date.toLocaleDateString(), timeStart)
+
+    const event:Event = {
+      category: selected,
+      endDate: dateToTimestamp(timeStart),
+      files: [],
+      name,
+      people: [],
+      startDate: dateToTimestamp(timeStart),
+      userId: user.id
+    }
+    console.log(event)
+    //eventsApi.addEvent(event)
+  }
 
   return (
     <View style={$container}>
@@ -102,14 +124,14 @@ export const AddNewEventScreen = ({ navigation }) => {
               leftIconColor={colors.palette.neutral100}
               titleTx={"NewEventScreen.newActivity"}
               rightIcon={"check"}
-              onRightPress={() => navigation.navigate("Home")}
+              onRightPress={saveEvent}
               onLeftPress={() => navigation.navigate("Home")}
               rightIconColor={colors.palette.neutral100}
               containerStyle={{ borderBottomWidth: 0.5, borderColor: colors.palette.neutral800 }}
               backgroundColor={colors.palette.secondary600} />
       <View style={$inputContainer}>
         <Icon icon={"play"} color={"white"} size={30} />
-        <TextInput style={$inputName} placeholder={"What is planed?"}
+        <TextInput value={name} onChangeText={(e)=>setName(e)} style={$inputName} placeholder={"What is planed?"}
                    placeholderTextColor={colors.palette.neutral400} />
       </View>
       <View style={$categoryContainer}>
@@ -128,11 +150,11 @@ export const AddNewEventScreen = ({ navigation }) => {
         <View style={$sectionContainer}>
           <View style={$sectionTime}>
             <TouchableOpacity onPress={pickStartTime}>
-              <Text text={timeStart} style={{ color: "white" }} size={"md"} />
+              <Text text={formatHourMinutes( timeStart)} style={{ color: "white" }} size={"md"} />
             </TouchableOpacity>
             <Text text={" - "} style={{ color: "white" }} size={"md"} />
             <TouchableOpacity onPress={pickEndTime}>
-              <Text text={timeEnd} style={{ color: "white" }} size={"md"} />
+              <Text text={formatHourMinutes(timeEnd)} style={{ color: "white" }} size={"md"} />
             </TouchableOpacity>
           </View>
         </View>
