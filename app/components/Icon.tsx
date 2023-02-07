@@ -17,27 +17,27 @@ interface IconProps extends TouchableOpacityProps {
    * The name of the icon
    */
   icon: IconTypes
-
+  
   /**
    * An optional tint color for the icon
    */
   color?: string
-
+  
   /**
    * An optional size for the icon. If not provided, the icon will be sized to the icon's resolution.
    */
   size?: number
-
+  
   /**
    * Style overrides for the icon image
    */
   style?: StyleProp<ImageStyle>
-
+  
   /**
    * Style overrides for the icon container
    */
   containerStyle?: StyleProp<ViewStyle>
-
+  
   /**
    * An optional function to be called when the icon is pressed
    */
@@ -59,12 +59,12 @@ export function Icon(props: IconProps) {
     containerStyle: $containerStyleOverride,
     ...WrapperProps
   } = props
-
+  
   const isPressable = !!WrapperProps.onPress
   const Wrapper: ComponentType<TouchableOpacityProps> = WrapperProps?.onPress
     ? TouchableOpacity
     : View
-
+  
   return (
     <Wrapper
       accessibilityRole={isPressable ? "imagebutton" : undefined}
@@ -122,6 +122,7 @@ export const iconRegistry = {
   slack: require("../../assets/icons/slack.png"),
   view: require("../../assets/icons/view.png"),
   x: require("../../assets/icons/x.png"),
+  clock: require("../../assets/icons/clock.png"),
 }
 
 const $imageStyle: ImageStyle = {

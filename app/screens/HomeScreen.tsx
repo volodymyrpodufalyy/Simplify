@@ -1,18 +1,15 @@
-import React, { useState } from "react"
-import { Text, TextStyle, View, ViewStyle } from "react-native"
-import { Header } from "../components"
-import { colors, spacing, typography } from "../theme"
+import React from "react"
+import { View, ViewStyle } from "react-native"
+import { Header, UpcomingEvents } from "../components"
+import { colors } from "../theme"
 import { Calendar, CalendarProvider } from "react-native-calendars"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { rootReducer, useAppSelector } from "../store/store"
-import { firebase } from "@react-native-firebase/auth"
+import { useAppSelector } from "../store/store"
 
 export const HomeScreen = () => {
-  const [heightCalendar, setHeightCalendar] = useState(1)
-  const date = new Date()
-
-
-
+  const { user } = useAppSelector((state) => state.AuthReducer)
+  console.log(user)
+  
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={$container}>
@@ -32,8 +29,7 @@ export const HomeScreen = () => {
           </CalendarProvider>
         </View>
         <View style={$bottomContainer}>
-          {/* TODO: replace with <UpcomingEvents /> component */}
-          <Text style={$upcomingEventsTitle}>Upcoming</Text>
+          <UpcomingEvents />
         </View>
       </View>
     </GestureHandlerRootView>
@@ -54,17 +50,6 @@ const $topContainer: ViewStyle = {
 
 const $bottomContainer: ViewStyle = {
   flex: 2,
-  backgroundColor: colors.palette.neutral750,
-  borderTopLeftRadius: 25,
-  borderTopRightRadius: 25,
-}
-
-const $upcomingEventsTitle: TextStyle = {
-  color: colors.palette.neutral100,
-  fontSize: 20,
-  ...typography.primary,
-  textAlign: "center",
-  paddingTop: spacing.medium,
 }
 
 const $calendar = {
