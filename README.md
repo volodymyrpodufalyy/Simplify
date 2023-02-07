@@ -10,8 +10,8 @@ Tech stack:
 - TypeScript
 
 
-## [Releases](https://appdistribution.firebase.google.com/testerapps/1:579688255462:android:7da4d80f411f53c6f45027/releases/3r17r4vfblloo?utm_source=firebase-console)
-### [APK](https://appdistribution.firebase.google.com/testerapps/1:579688255462:android:7da4d80f411f53c6f45027/releases/3q3jugvm8cuqg?utm_source=firebase-console)
+## Releases
+### Email us for testing or [send request](https://appdistribution.firebase.google.com/testerapps/1:579688255462:android:7da4d80f411f53c6f45027/releases/3q3jugvm8cuqg?utm_source=firebase-console) 
 ## Quick Start
 
 To start the app locally:
