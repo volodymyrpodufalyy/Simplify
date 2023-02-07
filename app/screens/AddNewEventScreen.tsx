@@ -20,6 +20,7 @@ import { CATEGORIES } from "../common/constants"
 import { addHours } from "date-fns"
 import { setCurrentEvent } from "../store/event/action"
 
+
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
 export const AddNewEventScreen = ({ navigation }) => {
@@ -47,16 +48,21 @@ export const AddNewEventScreen = ({ navigation }) => {
     Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null
   >()
 
-  useEffect(()=>{
-    console.log(currentEvent?.files[0])
-    if (currentEvent){
+  useEffect(() => {
+
+    if (currentEvent) {
       setName(currentEvent.name)
       setSelected(currentEvent.category)
       setTimeStart(timestampToDate(currentEvent.startDate))
       setTimeEnd(timestampToDate(currentEvent.endDate))
       setDate(timestampToDate(currentEvent.startDate))
-    }
 
+      if (currentEvent?.files[0]) {
+        const name = currentEvent?.files[0].split("%2F")[1].split("?")[0]
+        // @ts-ignore
+        // setFile({name, size:12343})
+      }
+    }
 
   }, [currentEvent])
   const pickFile = async () => {
@@ -72,6 +78,10 @@ export const AddNewEventScreen = ({ navigation }) => {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const openFile = async () => {
+
+  }
   const handleConfirmTime = (date) => {
 
     if (isTimeStart) {
@@ -108,7 +118,7 @@ export const AddNewEventScreen = ({ navigation }) => {
 
   const { user } = useAppSelector((state) => state.AuthReducer)
 
-  const  saveEvent = async () => {
+  const saveEvent = async () => {
 
     if (selected !== "" && name !== "") {
 
@@ -120,12 +130,19 @@ export const AddNewEventScreen = ({ navigation }) => {
         category: selected,
         startDate: dateToTimestamp(replaceTimeInDate(date, timeStart)),
         endDate: dateToTimestamp(replaceTimeInDate(date, timeEnd)),
-        files: url?[url]:[],
+        files: url ? [url] : [],
         name,
         people: [],
         userId: user.uid,
       }
-      await eventsApi.addEvent(event)
+
+      if (currentEvent) {
+        await eventsApi.updateEvent(currentEvent.key, event)
+      } else {
+        await eventsApi.addEvent(event)
+      }
+
+
       navigation.navigate("Home")
     } else {
       name === "" ? alert("Name is required") : alert("Category is required")
@@ -138,9 +155,11 @@ export const AddNewEventScreen = ({ navigation }) => {
     navigation.navigate("Home")
   }
 
-  BackHandler.addEventListener('hardwareBackPress', function() {
+  BackHandler.addEventListener("hardwareBackPress", function() {
     dispatch(setCurrentEvent(null))
   })
+
+
 
   return (
     <View style={$container}>
@@ -162,7 +181,7 @@ export const AddNewEventScreen = ({ navigation }) => {
               leftTextStyle={{ color: colors.palette.neutral100 }}
               leftIcon={"caretLeft"}
               leftIconColor={colors.palette.neutral100}
-              title={currentEvent?"Your activity": 'New activity'}
+              title={currentEvent ? "Your activity" : "New activity"}
               rightIcon={"check"}
               onRightPress={saveEvent}
               onLeftPress={backToHome}
@@ -233,11 +252,18 @@ export const AddNewEventScreen = ({ navigation }) => {
             {/* <Text style={{color:'white'}}>File uploaded</Text> */}
           </View>
         </View>
-        <TouchableOpacity style={$sectionContainer}>
+        {/* <TouchableOpacity style={$sectionContainer}> */}
+        {/*   <Icon icon={"peoples"} color={"white"} size={30} /> */}
+        {/*   <TextInput style={$inputName} placeholder={"Add peoples for event"} */}
+        {/*              placeholderTextColor={colors.palette.neutral400} /> */}
+        {/* </TouchableOpacity> */}
+        <View style={$sectionContainer} >
           <Icon icon={"peoples"} color={"white"} size={30} />
-          <TextInput style={$inputName} placeholder={"Add peoples for event"}
-                     placeholderTextColor={colors.palette.neutral400} />
-        </TouchableOpacity>
+
+          <View>
+
+          </View>
+        </View>
       </View>
 
     </View>
