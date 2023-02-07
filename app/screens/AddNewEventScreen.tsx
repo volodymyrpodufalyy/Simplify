@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars,react-native/no-inline-styles */
-import React, { useState } from "react"
-import { Dimensions, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import React, { useEffect, useState } from "react"
+import { BackHandler, Dimensions, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import {
   Dropdown, Header, Icon,
   Text,
@@ -15,15 +15,17 @@ import DocumentPicker, {
 import eventsApi from "../services/api/eventsApi"
 import { Event, EventCategory } from "../common/types/types"
 import { useAppDispatch, useAppSelector } from "../store/store"
-import { dateToTimestamp } from "../utils/date"
+import { dateToTimestamp, timestampToDate } from "../utils/date"
 import { CATEGORIES } from "../common/constants"
 import { addHours } from "date-fns"
-
-
+import { setCurrentEvent } from "../store/event/action"
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
 export const AddNewEventScreen = ({ navigation }) => {
+  const { currentEvent } = useAppSelector((state) => state.EventReducer)
+
+  const dispatch = useAppDispatch()
 
   const category = CATEGORIES.map((value, index) => ({ key: index, value }))
 
@@ -45,7 +47,18 @@ export const AddNewEventScreen = ({ navigation }) => {
     Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null
   >()
 
-  const dispatch = useAppDispatch()
+  useEffect(()=>{
+    console.log(currentEvent?.files[0])
+    if (currentEvent){
+      setName(currentEvent.name)
+      setSelected(currentEvent.category)
+      setTimeStart(timestampToDate(currentEvent.startDate))
+      setTimeEnd(timestampToDate(currentEvent.endDate))
+      setDate(timestampToDate(currentEvent.startDate))
+    }
+
+
+  }, [currentEvent])
   const pickFile = async () => {
     try {
       const pickerResult = await DocumentPicker.pickSingle({
@@ -120,6 +133,15 @@ export const AddNewEventScreen = ({ navigation }) => {
 
   }
 
+  const backToHome = () => {
+    dispatch(setCurrentEvent(null))
+    navigation.navigate("Home")
+  }
+
+  BackHandler.addEventListener('hardwareBackPress', function() {
+    dispatch(setCurrentEvent(null))
+  })
+
   return (
     <View style={$container}>
       <DateTimePickerModal
@@ -140,10 +162,10 @@ export const AddNewEventScreen = ({ navigation }) => {
               leftTextStyle={{ color: colors.palette.neutral100 }}
               leftIcon={"caretLeft"}
               leftIconColor={colors.palette.neutral100}
-              titleTx={"NewEventScreen.newActivity"}
+              title={currentEvent?"Your activity": 'New activity'}
               rightIcon={"check"}
               onRightPress={saveEvent}
-              onLeftPress={() => navigation.navigate("Home")}
+              onLeftPress={backToHome}
               rightIconColor={colors.palette.neutral100}
               containerStyle={{ borderBottomWidth: 0.5, borderColor: colors.palette.neutral800 }}
               backgroundColor={colors.palette.secondary600} />
@@ -155,7 +177,7 @@ export const AddNewEventScreen = ({ navigation }) => {
       <View style={$categoryContainer}>
         <Icon icon={"categories"} color={"white"} size={28} />
         <View style={$selectCategory}>
-          <Dropdown data={category} setSelected={setSelected} />
+          <Dropdown data={category} setSelected={setSelected} selected={selected} />
         </View>
       </View>
       <View style={$sections}>

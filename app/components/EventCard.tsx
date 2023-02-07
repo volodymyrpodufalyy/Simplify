@@ -1,28 +1,28 @@
 import React, { useMemo } from "react"
 import { Event } from "../common/types/Events"
-import { Text, TextStyle, View, ViewStyle } from "react-native"
+import { Text, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import { colors, typography } from "../theme"
 import { Icon } from "./Icon"
 import { timestampToDate } from "../utils/date"
 import format from "date-fns/format"
 
-
 interface EventCardProps {
   event: Event;
+  openEvent: any
 }
 
 export const EventCard = (props: EventCardProps) => {
-  const { event } = props
-  
+  const { event, openEvent } = props
+
   const { startDate, endDate } = useMemo(() => {
     return {
       startDate: format(timestampToDate(event.startDate), "hh:mm"),
       endDate: format(timestampToDate(event.endDate), "hh:mm"),
     }
   }, [event])
-  
+
   return (
-    <View style={$eventCard}>
+    <TouchableOpacity style={$eventCard} onPress={()=>openEvent(event)}>
       <View style={$halfContainer}>
         <Text style={$eventNameText}>{event.name}</Text>
       </View>
@@ -36,7 +36,7 @@ export const EventCard = (props: EventCardProps) => {
           <Text style={$eventDateText}>{startDate} - {endDate}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 

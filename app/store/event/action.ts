@@ -12,5 +12,11 @@ const uploadFile = createAsyncThunk<any, any, AsyncThunkConfig>(ActionType.FILE_
     return null
   })
 
+const setCurrentEvent = createAsyncThunk<any, any, AsyncThunkConfig>(ActionType.GET_EVENT_BY_ID,
+   (event) => {
 
-export { uploadFile }
+
+    return event
+  })
+
+export { uploadFile,setCurrentEvent }

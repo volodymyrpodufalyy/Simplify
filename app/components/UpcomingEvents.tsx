@@ -11,22 +11,22 @@ import { Filter } from "./Filter"
 import { useAppSelector } from "../store/store"
 import { timestampToDate } from "../utils/date"
 
-export const UpcomingEvents = () => {
+export const UpcomingEvents = ({openEvent}) => {
   const [loading, setLoading] = useState(true)
   const [events, setEvents] = useState<Event[]>([])
   const [categoryFilter, setCategoryFilter] = useState("")
-  
+
   const { selectedDate } = useAppSelector((state) => state.EventsReducer)
-  
+
   const user = auth().currentUser
-  
+
   useEffect(() => {
     const subscriber = firestore()
       .collection("events")
       .where("userId", "==", user.uid)
       .onSnapshot((querySnapshot) => {
         const result = []
-        
+
         if (querySnapshot) {
           querySnapshot.forEach(documentSnapshot => {
             result.push({
@@ -38,21 +38,21 @@ export const UpcomingEvents = () => {
           setLoading(false)
         }
       })
-    
+
     // Unsubscribe from events when no longer in use
     return () => subscriber()
   }, [selectedDate])
-  
+
   const filteredEvents = useMemo(() => {
     if (categoryFilter && categoryFilter !== "All")
       return events.filter(event => event.category === categoryFilter)
     else return events
   }, [events, categoryFilter])
-  
+
   const onFilterPress = useCallback((e: string) => {
     setCategoryFilter(e)
   }, [])
-  
+
   return (
     <View style={$container}>
       <Text style={$upcomingEventsTitle}>Upcoming events</Text>
@@ -71,7 +71,7 @@ export const UpcomingEvents = () => {
             contentContainerStyle={{ paddingBottom: 70 }}
             data={filteredEvents}
             renderItem={({ item }) => (
-              <EventCard event={item} />
+              <EventCard event={item} openEvent={openEvent} />
             )}
             estimatedItemSize={10}
           />

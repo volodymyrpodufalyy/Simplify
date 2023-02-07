@@ -13,13 +13,12 @@ import { Icon } from "./Icon"
 import { spacing } from "../theme"
 
 
-export const Dropdown = ({ setSelected, data }) => {
-
+export const Dropdown = ({ setSelected, data, selected }) => {
 
   const oldOption = React.useRef(null)
   const [_firstRender, _setFirstRender] = React.useState<boolean>(true)
   const [dropdown, setDropdown] = React.useState<boolean>(false)
-  const [selectedval, setSelectedVal] = React.useState<any>("")
+  const [selectedval, setSelectedVal] = React.useState<any>(selected)
   const height = 200
   const animatedvalue = React.useRef(new Animated.Value(0)).current
   const [filtereddata, setFilteredData] = React.useState(data)
@@ -49,20 +48,13 @@ export const Dropdown = ({ setSelected, data }) => {
     setFilteredData(data)
   }, [data])
 
-
   React.useEffect(() => {
     if (_firstRender) {
       _setFirstRender(false)
 
     }
-
-  }, [selectedval])
-
-
-
-
-
-
+    setSelectedVal(selected)
+  }, [selected])
 
   return (
     <View style={{}}>
