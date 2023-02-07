@@ -7,7 +7,7 @@ import {
 } from "../components"
 import { colors, spacing } from "../theme"
 import DateTimePickerModal from "react-native-modal-datetime-picker"
-import { formatHourMinutes } from "../utils/formatDate"
+import { formatDate, formatHourMinutes } from "../utils/formatDate"
 import DocumentPicker, {
   DirectoryPickerResponse,
   DocumentPickerResponse,
@@ -21,18 +21,19 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
 export const AddNewEventScreen = ({ navigation }) => {
 
-  const category = [{key:1, value:'Birthday'}]
-  const currentDate = new Date()
+  const category = [{ key: 1, value: "Birthday" }]
+
   const [selected, setSelected] = useState("")
 
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false)
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
   const [isTimeStart, setIsTimeStart] = useState(true)
-  const [timeStart, setTimeStart] = useState(currentDate)
 
-  const [timeEnd, setTimeEnd] = useState(currentDate)
+  const [timeStart, setTimeStart] = useState(new Date())
+  const [timeEnd, setTimeEnd] = useState(new Date())
+
   const [date, setDate] = useState(new Date())
-  const [name, setName] = useState('')
+  const [name, setName] = useState("")
 
   const [file, setFile] = useState<
     Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null
@@ -56,16 +57,17 @@ export const AddNewEventScreen = ({ navigation }) => {
     if (isTimeStart) {
       setTimeStart(date)
       if (date >= timeEnd) {
-        date.setHours(date.getHours() + 1)
-        setTimeEnd(date)
+        const newDate = new Date(date)
+        newDate.setHours(date.getHours() + 1)
+        setTimeEnd(newDate)
       }
 
     } else {
       setTimeEnd(date)
       if (date <= timeStart) {
-        date.setHours(date.getHours() - 1)
-        setTimeStart(date)
-
+        const newDate = new Date(date)
+        newDate.setHours(date.getHours() - 1)
+        setTimeStart(newDate)
       }
     }
     setTimePickerVisibility(false)
@@ -87,19 +89,19 @@ export const AddNewEventScreen = ({ navigation }) => {
   const { user } = useAppSelector((state) => state.AuthReducer)
 
   const saveEvent = () => {
-    // console.log(date.toLocaleDateString(), timeStart)
 
-    const event:Event = {
+    const event: Event = {
       category: selected,
       endDate: dateToTimestamp(timeStart),
       files: [],
       name,
       people: [],
       startDate: dateToTimestamp(timeStart),
-      userId: user.id
+      userId: user.uid,
     }
-    console.log(event)
-    //eventsApi.addEvent(event)
+
+    eventsApi.addEvent(event)
+    navigation.navigate('Home')
   }
 
   return (
@@ -131,7 +133,7 @@ export const AddNewEventScreen = ({ navigation }) => {
               backgroundColor={colors.palette.secondary600} />
       <View style={$inputContainer}>
         <Icon icon={"play"} color={"white"} size={30} />
-        <TextInput value={name} onChangeText={(e)=>setName(e)} style={$inputName} placeholder={"What is planed?"}
+        <TextInput value={name} onChangeText={(e) => setName(e)} style={$inputName} placeholder={"What is planed?"}
                    placeholderTextColor={colors.palette.neutral400} />
       </View>
       <View style={$categoryContainer}>
@@ -150,7 +152,7 @@ export const AddNewEventScreen = ({ navigation }) => {
         <View style={$sectionContainer}>
           <View style={$sectionTime}>
             <TouchableOpacity onPress={pickStartTime}>
-              <Text text={formatHourMinutes( timeStart)} style={{ color: "white" }} size={"md"} />
+              <Text text={formatHourMinutes(timeStart)} style={{ color: "white" }} size={"md"} />
             </TouchableOpacity>
             <Text text={" - "} style={{ color: "white" }} size={"md"} />
             <TouchableOpacity onPress={pickEndTime}>
@@ -164,7 +166,7 @@ export const AddNewEventScreen = ({ navigation }) => {
           </TouchableOpacity>
           <View style={$sectionText}>
             <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
-              <Text text={date.toLocaleDateString()} style={{ color: "white" }} size={"md"} />
+              <Text text={formatDate(date.toISOString())} style={{ color: "white" }} size={"md"} />
             </TouchableOpacity>
           </View>
         </View>

@@ -1,5 +1,5 @@
 type UserByIdResponse = {
-  id: string;
+  uid: string;
   email: string;
 
 };

@@ -87,7 +87,7 @@ const signIn = createAsyncThunk<any, UserSignUpRequest, AsyncThunkConfig>(Action
         },
       }
     }
-    console.log('qwewqe')
+
     return payload
   })
 

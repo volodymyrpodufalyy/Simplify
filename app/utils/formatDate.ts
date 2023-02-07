@@ -21,8 +21,11 @@ export const formatDate = (date: string, dateFormat?: string, options?: Options)
   return format(parseISO(date), dateFormat ?? "MMM dd, yyyy", dateOptions)
 }
 
-export const formatHourMinutes = (date) =>{
-  const minutes = date.getMinutes().toLocaleString()==='0'?'00':date.getMinutes().toLocaleString()
-  const time = date.getHours().toLocaleString()+':' + minutes
-  return time
+export const formatHourMinutes = (date) => {
+  let minutes = date.getMinutes().toLocaleString()
+  let hours = date.getHours().toLocaleString()
+  hours = hours.length === 1 ? "0" + hours : hours
+  minutes = minutes.length === 1 ? "0" + minutes : minutes
+
+  return hours + ":" + minutes
 }
