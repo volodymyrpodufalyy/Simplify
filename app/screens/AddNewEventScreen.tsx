@@ -19,7 +19,8 @@ import { dateToTimestamp, timestampToDate } from "../utils/date"
 import { CATEGORIES } from "../common/constants"
 import { addHours } from "date-fns"
 import { setCurrentEvent } from "../store/event/action"
-
+import { current } from "@reduxjs/toolkit"
+import { openFile } from "../utils/openFile"
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
@@ -48,21 +49,15 @@ export const AddNewEventScreen = ({ navigation }) => {
     Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null
   >()
 
-  useEffect(() => {
-
-    if (currentEvent) {
+  useEffect(()=>{
+    if (currentEvent){
       setName(currentEvent.name)
       setSelected(currentEvent.category)
       setTimeStart(timestampToDate(currentEvent.startDate))
       setTimeEnd(timestampToDate(currentEvent.endDate))
       setDate(timestampToDate(currentEvent.startDate))
-
-      if (currentEvent?.files[0]) {
-        const name = currentEvent?.files[0].split("%2F")[1].split("?")[0]
-        // @ts-ignore
-        // setFile({name, size:12343})
-      }
     }
+
 
   }, [currentEvent])
   const pickFile = async () => {
@@ -78,10 +73,6 @@ export const AddNewEventScreen = ({ navigation }) => {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const openFile = async () => {
-
-  }
   const handleConfirmTime = (date) => {
 
     if (isTimeStart) {
@@ -118,7 +109,7 @@ export const AddNewEventScreen = ({ navigation }) => {
 
   const { user } = useAppSelector((state) => state.AuthReducer)
 
-  const saveEvent = async () => {
+  const  saveEvent = async () => {
 
     if (selected !== "" && name !== "") {
 
@@ -147,9 +138,9 @@ export const AddNewEventScreen = ({ navigation }) => {
     } else {
       name === "" ? alert("Name is required") : alert("Category is required")
     }
-
+    
   }
-
+  
   const backToHome = () => {
     dispatch(setCurrentEvent(null))
     navigation.navigate("Home")
@@ -158,8 +149,6 @@ export const AddNewEventScreen = ({ navigation }) => {
   BackHandler.addEventListener("hardwareBackPress", function() {
     dispatch(setCurrentEvent(null))
   })
-
-
 
   return (
     <View style={$container}>
@@ -230,40 +219,40 @@ export const AddNewEventScreen = ({ navigation }) => {
         <View style={$sectionContainer}>
           <TouchableOpacity><Icon icon={"attach"} color={"white"} size={30} /></TouchableOpacity>
           <View style={$sectionText}>
-            {!file ? <TouchableOpacity onPress={pickFile}>
-                <Text tx={"NewEventScreen.attach"} style={{ color: "white" }} size={"md"} />
-              </TouchableOpacity> :
-              <View style={$file}>
-                <Icon icon={"file"} size={40} color={"white"} style={{ marginRight: 10 }} />
-                <View>
-                  {/* @ts-ignore */}
-                  <Text text={file.name} style={{ color: "white", maxWidth: 150 }} numberOfLines={1} size={"md"} />
-                  {/* @ts-ignore */}
-                  <Text text={(file.size * 0.001).toString() + " KB"} style={{ color: "white" }} size={"xs"} />
-                </View>
-                <TouchableOpacity onPress={() => {
-                  setFile(null)
-                }}>
-                  <Icon icon={"cross"} size={20} color={"white"} style={{ marginLeft: 20 }} />
-                </TouchableOpacity>
-
-              </View>
-            }
-            {/* <Text style={{color:'white'}}>File uploaded</Text> */}
+            {!currentEvent?.files ? (
+              <>
+                {!file ? <TouchableOpacity onPress={pickFile}>
+                    <Text tx={"NewEventScreen.attach"} style={{ color: "white" }} size={"md"} />
+                  </TouchableOpacity> :
+                  <View style={$file}>
+                    <Icon icon={"file"} size={40} color={"white"} style={{ marginRight: 10 }} />
+                    <View>
+                      {/* @ts-ignore */}
+                      <Text text={file.name} style={{ color: "white", maxWidth: 150 }} numberOfLines={1} size={"md"} />
+                      {/* @ts-ignore */}
+                      <Text text={(file.size * 0.001).toString() + " KB"} style={{ color: "white" }} size={"xs"} />
+                    </View>
+                    <TouchableOpacity onPress={() => {
+                      setFile(null)
+                    }}>
+                      <Icon icon={"cross"} size={20} color={"white"} style={{ marginLeft: 20 }} />
+                    </TouchableOpacity>
+                  
+                  </View>
+                }
+              </>
+            ) : (
+              <TouchableOpacity onPress={() => openFile(currentEvent?.files[0])}>
+                <Text style={{ color: "white" }}>Files({currentEvent.files.length})</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
-        {/* <TouchableOpacity style={$sectionContainer}> */}
-        {/*   <Icon icon={"peoples"} color={"white"} size={30} /> */}
-        {/*   <TextInput style={$inputName} placeholder={"Add peoples for event"} */}
-        {/*              placeholderTextColor={colors.palette.neutral400} /> */}
-        {/* </TouchableOpacity> */}
-        <View style={$sectionContainer} >
+        <TouchableOpacity style={$sectionContainer}>
           <Icon icon={"peoples"} color={"white"} size={30} />
-
-          <View>
-
-          </View>
-        </View>
+          <TextInput style={$inputName} placeholder={"Add peoples for event"}
+                     placeholderTextColor={colors.palette.neutral400} />
+        </TouchableOpacity>
       </View>
 
     </View>
@@ -288,7 +277,7 @@ const $container: ViewStyle = {
 
 const $inputName: TextStyle = {
   paddingHorizontal: spacing.medium,
-
+  
   color: colors.palette.neutral100,
   fontSize: 18,
 }
@@ -335,7 +324,7 @@ const $sectionText: ViewStyle = {
   marginLeft: spacing.medium,
   paddingVertical: spacing.small,
   borderColor: colors.palette.neutral600,
-
+  
 }
 
 const $sectionTime: ViewStyle = {
