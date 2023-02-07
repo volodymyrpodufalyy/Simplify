@@ -30,7 +30,7 @@ export class EventsApi {
       .add(event)
   }
 
-  public async updateEvent(user: User, eventId: string, updatedEvent: Event) {
+  public async updateEvent(eventId: string, updatedEvent: Event) {
     await firestore()
       .collection("events")
       .doc(eventId)

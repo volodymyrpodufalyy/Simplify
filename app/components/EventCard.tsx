@@ -4,7 +4,8 @@ import { Text, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native
 import { colors, typography } from "../theme"
 import { Icon } from "./Icon"
 import { timestampToDate } from "../utils/date"
-import format from "date-fns/format"
+
+import { formatHourMinutes } from "../utils/formatDate"
 
 interface EventCardProps {
   event: Event;
@@ -16,8 +17,8 @@ export const EventCard = (props: EventCardProps) => {
 
   const { startDate, endDate } = useMemo(() => {
     return {
-      startDate: format(timestampToDate(event.startDate), "hh:mm"),
-      endDate: format(timestampToDate(event.endDate), "hh:mm"),
+      startDate: timestampToDate(event.startDate) ,
+      endDate: timestampToDate(event.endDate)
     }
   }, [event])
 
@@ -32,8 +33,9 @@ export const EventCard = (props: EventCardProps) => {
             <Text style={$eventCategoryText}>{event.category}</Text>
           </View> : null}
         <View style={$timeContainer}>
-          <Icon icon={"clock"} />
-          <Text style={$eventDateText}>{startDate} - {endDate}</Text>
+          {event.files? <Icon icon={"file"} size={18} style={{marginRight:5}} />: null}
+          <Icon icon={"clock"} size={18}/>
+          <Text style={$eventDateText}>{formatHourMinutes(startDate)}-{formatHourMinutes(endDate)}</Text>
         </View>
       </View>
     </TouchableOpacity>
