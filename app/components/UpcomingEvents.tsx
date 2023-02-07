@@ -37,9 +37,11 @@ export const UpcomingEvents = ({openEvent}) => {
             })
           })
 
-          setEvents(result.filter((el) => timestampToDate(el.startDate).toDateString() === selectedDate.toDateString()))
-          eventsApi.getNotMyEvents(user).then(value => setEvents([...result, ...value]))
-          setEvents(events.filter((el) => timestampToDate(el.startDate).toDateString() === selectedDate.toDateString()))
+
+          eventsApi.getNotMyEvents(user)
+            .then(value =>setEvents(result.concat(value)
+              .filter((el) => timestampToDate(el.startDate).toDateString() === selectedDate.toDateString())) )
+
 
           setLoading(false)
         }
@@ -102,7 +104,7 @@ const $wrapper: ViewStyle = {
 }
 
 const $filters: ViewStyle = {
-  marginHorizontal: 30,
+  marginHorizontal: 10,
   marginVertical: 10,
   paddingRight: 40,
   flexDirection: "row",

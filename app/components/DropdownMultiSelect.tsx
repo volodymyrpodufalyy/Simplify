@@ -7,7 +7,6 @@ import { MultiSelect } from "react-native-element-dropdown"
 export const DropdownMultiSelect = ({users,selected, setSelected }) => {
   const data = users.map((el)=>({label:el.email,value: el.email}))
 
-
   const renderItem = (item: any) => {
     return (
       <View style={styles.item}>

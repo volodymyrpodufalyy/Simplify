@@ -62,9 +62,9 @@ export const SignInScreen = ({ navigation }) => {
   return (
     <View style={$screenContentContainer}>
 
-
+      <Image source={welcome} style={$welcomeImage}/>
       <View style={{ alignItems:'center'}}>
-        <Image source={welcome} style={$welcomeImage}/>
+
         <Text tx={"loginScreen.welcomeBack"} size={"xll"} style={{ textAlign: "center" }} />
       </View>
       <View>
@@ -109,28 +109,27 @@ export const SignInScreen = ({ navigation }) => {
           onPress={login}
         />
       </View>
-      <Text tx={"loginScreen.or"} style={{ textAlign: "center", marginTop: 10 }} />
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-        <View style={{ marginRight: 10 }}>
-          <TouchableOpacity style={$spaces}>
-            <Image source={google} style={$icoImage} />
-          </TouchableOpacity>
-          <TouchableOpacity style={$spaces}>
-            <Image source={facebook} style={$icoImage} />
-          </TouchableOpacity>
+      {/* <Text tx={"loginScreen.or"} style={{ textAlign: "center", marginTop: 10 }} /> */}
+      {/* <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}> */}
+      {/*   <View style={{ marginRight: 10 }}> */}
+      {/*     <TouchableOpacity style={$spaces}> */}
+      {/*       <Image source={google} style={$icoImage} /> */}
+      {/*     </TouchableOpacity> */}
+      {/*     <TouchableOpacity style={$spaces}> */}
+      {/*       <Image source={facebook} style={$icoImage} /> */}
+      {/*     </TouchableOpacity> */}
 
-        </View>
-        <View style={{}}>
-          <TouchableOpacity style={$spaces}>
-            <Text tx={"loginScreen.signInGoogle"} size={"sm"} />
-          </TouchableOpacity>
-          <TouchableOpacity style={$spaces}>
-            <Text tx={"loginScreen.signInFacebook"} size={"sm"} />
-          </TouchableOpacity>
-        </View>
-
-      </View>
-      <TouchableOpacity  onPress={() => navigation.navigate("SignUp")}>
+      {/*   </View> */}
+      {/*   <View style={{}}> */}
+      {/*     <TouchableOpacity style={$spaces}> */}
+      {/*       <Text tx={"loginScreen.signInGoogle"} size={"sm"} /> */}
+      {/*     </TouchableOpacity> */}
+      {/*     <TouchableOpacity style={$spaces}> */}
+      {/*       <Text tx={"loginScreen.signInFacebook"} size={"sm"} /> */}
+      {/*     </TouchableOpacity> */}
+      {/*   </View> */}
+      {/* </View> */}
+      <TouchableOpacity style={{marginTop:spacing.medium}} onPress={() => navigation.navigate("SignUp")}>
         <Text tx={"loginScreen.iNotAccount"} size={"md"}
               style={{ textAlign: "center", color: colors.palette.secondary500 }} />
       </TouchableOpacity>
@@ -142,6 +141,7 @@ export const SignInScreen = ({ navigation }) => {
 
 const $screenContentContainer: ViewStyle = {
   paddingTop: 0,
+
   backgroundColor: colors.palette.neutral100,
   paddingBottom: spacing.massive,
   paddingHorizontal: spacing.large,

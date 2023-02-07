@@ -112,26 +112,26 @@ export const SignupScreen = ({ navigation }) => {
           onPress={signUpHandler}
         />
       </View>
-      <Text tx={"loginScreen.or"} style={{ textAlign: "center", marginTop: 10 }} />
-      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-        <View style={{ marginRight: 10 }}>
-          <TouchableOpacity style={$spaces}>
-            <Image source={google} style={$icoImage} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={facebook} style={$icoImage} />
-          </TouchableOpacity>
+      {/* <Text tx={"loginScreen.or"} style={{ textAlign: "center", marginTop: 10 }} /> */}
+      {/* <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}> */}
+      {/*   <View style={{ marginRight: 10 }}> */}
+      {/*     <TouchableOpacity style={$spaces}> */}
+      {/*       <Image source={google} style={$icoImage} /> */}
+      {/*     </TouchableOpacity> */}
+      {/*     <TouchableOpacity> */}
+      {/*       <Image source={facebook} style={$icoImage} /> */}
+      {/*     </TouchableOpacity> */}
 
-        </View>
-        <View style={{}}>
-          <TouchableOpacity style={$spaces}>
-            <Text tx={"loginScreen.signUpGoogle"} size={"sm"} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text tx={"loginScreen.signUpFacebook"} size={"sm"} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      {/*   </View> */}
+      {/*   <View style={{}}> */}
+      {/*     <TouchableOpacity style={$spaces}> */}
+      {/*       <Text tx={"loginScreen.signUpGoogle"} size={"sm"} /> */}
+      {/*     </TouchableOpacity> */}
+      {/*     <TouchableOpacity> */}
+      {/*       <Text tx={"loginScreen.signUpFacebook"} size={"sm"} /> */}
+      {/*     </TouchableOpacity> */}
+      {/*   </View> */}
+      {/* </View> */}
 
       <Image source={coffee} style={$coffee} />
     </View>
@@ -140,7 +140,8 @@ export const SignupScreen = ({ navigation }) => {
 
 
 const $screenContentContainer: ViewStyle = {
-  paddingTop: spacing.massive,
+
+  justifyContent:"center",
   backgroundColor: colors.palette.neutral100,
   paddingBottom: spacing.massive,
   paddingHorizontal: spacing.large,

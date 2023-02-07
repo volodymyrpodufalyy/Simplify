@@ -48,7 +48,7 @@ export const EventCard = (props: EventCardProps) => {
 
 const $eventCard: ViewStyle = {
   flex: 1,
-  marginHorizontal: 30,
+  marginHorizontal: 10,
   backgroundColor: colors.palette.eventBg,
   borderRadius: 15,
   paddingLeft: 30,
@@ -74,8 +74,9 @@ const $timeContainer: ViewStyle = {
 }
 
 const $eventCategory: ViewStyle = {
-  height: 24,
+  height: 35,
   flex: 1,
+
   backgroundColor: colors.palette.neutral600,
   borderRadius: 15,
   alignItems: "center",

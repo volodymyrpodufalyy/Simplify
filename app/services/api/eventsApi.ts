@@ -60,6 +60,7 @@ export class EventsApi {
       .update(updatedEvent)
   }
   public async uploadFile(file) {
+    console.log(file)
     const reference = storage().ref(`files/${file.name}`);
     await reference.putFile(file.fileCopyUri)
     const url = await reference.getDownloadURL()

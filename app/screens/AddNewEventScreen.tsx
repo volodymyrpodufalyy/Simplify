@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars,react-native/no-inline-styles */
 import React, { useEffect, useState } from "react"
-import { BackHandler, Dimensions, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import {
+  ActivityIndicator,
+  BackHandler,
+  Dimensions,
+  TextInput,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native"
 import {
   Dropdown, Header, Icon,
   Text,
@@ -59,7 +68,6 @@ export const AddNewEventScreen = ({ navigation }) => {
 
 
   useEffect(()=>{
-    console.log(currentEvent)
     if (currentEvent){
       setName(currentEvent.name)
       setSelected(currentEvent.category)

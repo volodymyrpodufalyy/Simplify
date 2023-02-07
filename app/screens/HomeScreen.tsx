@@ -42,8 +42,6 @@ export const HomeScreen = ({navigation}) => {
     navigation.navigate('AddEvent')
   }
 
-
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={$container}>
