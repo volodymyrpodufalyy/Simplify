@@ -1,5 +1,6 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore"
-import Timestamp = FirebaseFirestoreTypes.Timestamp
+
+
 
 export enum EventCategory {
   BirthDay = "Birthday",
@@ -11,10 +12,10 @@ export enum EventCategory {
 
 export interface Event {
   name: string;
-  startDate: Timestamp;
-  endDate: Timestamp;
+  startDate: FirebaseFirestoreTypes.Timestamp;
+  endDate: FirebaseFirestoreTypes.Timestamp;
   userId: string;
-  category?: EventCategory;
+  category?: any;
   people: string[];
   files: string[];
 }
