@@ -12,7 +12,7 @@ import {
 import { colors, spacing, typography } from "../theme"
 import React, { useEffect } from "react"
 import { Icon } from "../components"
-import { rootReducer, useAppDispatch, useAppSelector } from "../store/store"
+import { useAppDispatch, useAppSelector } from "../store/store"
 import { getCurrentUser, logOut } from "../store/auth/action"
 
 const welcomeFace = require("../../assets/images/welcome-image.png")
@@ -24,7 +24,7 @@ export const ProfileScreen = () => {
     dispatch(getCurrentUser([]))
   },[])
 
-  const { user } = useAppSelector((state: rootReducer) => state.AuthReducer)
+  const { user } = useAppSelector((state) => state.AuthReducer)
 
   return (
     <SafeAreaView style={$container}>
