@@ -1,7 +1,5 @@
 import { FirebaseFirestoreTypes } from "@react-native-firebase/firestore"
 
-
-
 export enum EventCategory {
   BirthDay = "Birthday",
   WorkMeeting = "Work meeting",
