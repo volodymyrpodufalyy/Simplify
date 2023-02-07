@@ -2,7 +2,7 @@ import { FirebaseAuthTypes } from "@react-native-firebase/auth"
 import storage from "@react-native-firebase/storage"
 import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore"
 
-import {Event} from "../../common/types/types"
+import { Event } from "../../common/types/types"
 
 type User = FirebaseAuthTypes.User
 type QueryDocumentSnapshot = FirebaseFirestoreTypes.QueryDocumentSnapshot
@@ -12,6 +12,10 @@ type QueryDocumentSnapshot = FirebaseFirestoreTypes.QueryDocumentSnapshot
 export const mapDocToEvent = (doc: QueryDocumentSnapshot, arr: Event[]) => arr.push(doc.data() as Event)
 
 export class EventsApi {
+
+  public async getEventById(id: string) {
+    return await firestore().collection("events").doc(id).get()
+  }
 
   public async fetchEvents(user: User): Promise<Event[]> {
     const result: Event[] = []

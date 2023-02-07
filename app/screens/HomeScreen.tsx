@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { View, ViewStyle } from "react-native"
 import { Header, UpcomingEvents } from "../components"
 import { colors } from "../theme"
@@ -8,19 +8,20 @@ import { useAppDispatch, useAppSelector } from "../store/store"
 import { format } from "date-fns"
 import { setDate } from "../store/events/reducer"
 import { DateData } from "react-native-calendars/src/types"
+import { setCurrentEvent } from "../store/event/action"
 
-export const HomeScreen = () => {
+export const HomeScreen = ({navigation}) => {
   const { user } = useAppSelector((state) => state.AuthReducer)
-  
+
   const { selectedDate } = useAppSelector(state => state.EventsReducer)
   const dispatch = useAppDispatch()
-  
+
   const onDayPress = (day: DateData) => {
     dispatch(setDate(new Date(day.dateString)))
   }
-  
+
   const selectedDay = format(selectedDate, "yyyy-MM-dd")
-  
+
   const markedDates = useMemo(() => {
     return {
       [selectedDay]: {
@@ -31,7 +32,18 @@ export const HomeScreen = () => {
       },
     }
   }, [selectedDate])
-  
+
+  useEffect(()=>{
+    dispatch(setCurrentEvent(null))
+  },[])
+
+  const openEvent = (event) => {
+    dispatch(setCurrentEvent(event))
+    navigation.navigate('AddEvent')
+  }
+
+
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={$container}>
@@ -72,7 +84,7 @@ export const HomeScreen = () => {
           </CalendarProvider>
         </View>
         <View style={$bottomContainer}>
-          <UpcomingEvents />
+          <UpcomingEvents openEvent={openEvent} />
         </View>
       </View>
       <View style={$tabBarWrapper} />
