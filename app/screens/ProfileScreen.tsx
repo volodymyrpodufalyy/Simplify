@@ -33,14 +33,15 @@ export const ProfileScreen = () => {
           <Image source={welcomeFace} style={$userImage} />
           <Text style={$username}>Hello {user?.email.split('@')[0]}!</Text>
         </View>
-
+      
       </View>
       <View style={$bottomContainer}>
         <View style={$sectionContainer}>
           <Icon icon={"peoples"} color={"white"} size={28} />
           <View style={$sectionText}>
-            <Text style={{ color: "white", fontSize: 18,  }}>Username:</Text>
-            <TextInput value={"asdsd"} style={{ padding:0, paddingVertical:5, color: colors.palette.neutral400, fontSize: 18 }} />
+            <Text style={{ color: "white", fontSize: 18 }}>Username:</Text>
+            <TextInput value={"asdsd"}
+                       style={{ padding: 0, paddingVertical: 5, color: colors.palette.neutral400, fontSize: 18 }} />
           </View>
         </View>
         <View style={$sectionContainer}>
@@ -89,11 +90,11 @@ const $profileCard: TextStyle = {
   backgroundColor: colors.palette.neutral750,
   width: "90%",
   height: 200,
-
+  
   bottom: -100,
-
+  
   borderRadius: 15,
-
+  
   shadowColor: colors.palette.neutral100,
   shadowOffset: {
     width: 0,
@@ -101,9 +102,9 @@ const $profileCard: TextStyle = {
   },
   shadowOpacity: 0.1,
   shadowRadius: 11.95,
-
+  
   elevation: 20,
-
+  
   alignItems: "center",
   justifyContent: "center",
 }
@@ -112,12 +113,12 @@ const $userImage: ImageStyle = {
   height: 100,
   width: 100,
   borderRadius: 50,
-
+  
 }
 const $username: TextStyle = {
   fontSize: 20,
   color: "white",
   ...typography.primary,
   paddingTop: spacing.small,
-
+  
 }
