@@ -29,3 +29,10 @@ export const formatHourMinutes = (date) => {
 
   return hours + ":" + minutes
 }
+
+export const replaceTimeInDate = (date, time) => {
+
+  const datetime = date.toISOString().split('T')[0] + 'T' + time.toISOString().split('T')[1]
+  return new Date(datetime)
+
+}

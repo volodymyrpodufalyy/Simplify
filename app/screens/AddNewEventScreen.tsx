@@ -7,7 +7,7 @@ import {
 } from "../components"
 import { colors, spacing } from "../theme"
 import DateTimePickerModal from "react-native-modal-datetime-picker"
-import { formatDate, formatHourMinutes } from "../utils/formatDate"
+import { formatDate, formatHourMinutes, replaceTimeInDate } from "../utils/formatDate"
 import DocumentPicker, {
   DirectoryPickerResponse,
   DocumentPickerResponse,
@@ -24,20 +24,20 @@ import { addHours } from "date-fns"
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
 export const AddNewEventScreen = ({ navigation }) => {
-  
+
   const category = CATEGORIES.map((value, index) => ({ key: index, value }))
-  
+
   const { selectedDate } = useAppSelector(state => state.EventsReducer)
-  
+
   const [selected, setSelected] = useState("")
-  
+
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false)
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
   const [isTimeStart, setIsTimeStart] = useState(true)
-  
+
   const [timeStart, setTimeStart] = useState(selectedDate)
   const [timeEnd, setTimeEnd] = useState(addHours(selectedDate, 1))
-  
+
   const [date, setDate] = useState(selectedDate)
   const [name, setName] = useState("")
 
@@ -58,9 +58,9 @@ export const AddNewEventScreen = ({ navigation }) => {
       console.log(e)
     }
   }
-  
+
   const handleConfirmTime = (date) => {
-    
+
     if (isTimeStart) {
       setTimeStart(date)
       if (date >= timeEnd) {
@@ -68,7 +68,7 @@ export const AddNewEventScreen = ({ navigation }) => {
         newDate.setHours(date.getHours() + 1)
         setTimeEnd(newDate)
       }
-      
+
     } else {
       setTimeEnd(date)
       if (date <= timeStart) {
@@ -83,7 +83,7 @@ export const AddNewEventScreen = ({ navigation }) => {
     setDate(date)
     setDatePickerVisibility(false)
   }
-  
+
   const pickStartTime = () => {
     setIsTimeStart(true)
     setTimePickerVisibility(true)
@@ -92,19 +92,21 @@ export const AddNewEventScreen = ({ navigation }) => {
     setIsTimeStart(false)
     setTimePickerVisibility(true)
   }
-  
+
   const { user } = useAppSelector((state) => state.AuthReducer)
 
   const  saveEvent = async () => {
+
     if (selected !== "" && name !== "") {
+
       let url = null
       if (file) {
         url = await eventsApi.uploadFile(file)
       }
       const event: Event = {
         category: selected,
-        startDate: dateToTimestamp(timeStart),
-        endDate: dateToTimestamp(timeStart),
+        startDate: dateToTimestamp(replaceTimeInDate(date, timeStart)),
+        endDate: dateToTimestamp(replaceTimeInDate(date, timeEnd)),
         files: url?[url]:[],
         name,
         people: [],
@@ -115,9 +117,9 @@ export const AddNewEventScreen = ({ navigation }) => {
     } else {
       name === "" ? alert("Name is required") : alert("Category is required")
     }
-    
+
   }
-  
+
   return (
     <View style={$container}>
       <DateTimePickerModal
@@ -215,15 +217,15 @@ export const AddNewEventScreen = ({ navigation }) => {
                      placeholderTextColor={colors.palette.neutral400} />
         </TouchableOpacity>
       </View>
-    
+
     </View>
   )
 }
 
 const $file: ViewStyle = {
-  
+
   height: 50,
-  
+
   maxWidth: 250,
   alignItems: "center",
   width: "100%",
@@ -238,7 +240,7 @@ const $container: ViewStyle = {
 
 const $inputName: TextStyle = {
   paddingHorizontal: spacing.medium,
-  
+
   color: colors.palette.neutral100,
   fontSize: 18,
 }
@@ -285,7 +287,7 @@ const $sectionText: ViewStyle = {
   marginLeft: spacing.medium,
   paddingVertical: spacing.small,
   borderColor: colors.palette.neutral600,
-  
+
 }
 
 const $sectionTime: ViewStyle = {
