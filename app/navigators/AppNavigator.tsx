@@ -11,7 +11,6 @@ import Config from "../config"
 import { AddNewEventScreen, SignInScreen, SignupScreen, WelcomeScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { HomeNavigator } from "./HomeNavigator"
-import { firebase } from "@react-native-firebase/auth"
 import { rootReducer, useAppDispatch, useAppSelector } from "../store/store"
 import { getCurrentUser } from "../store/auth/action"
 
@@ -34,14 +33,15 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = () => {
   const dispatch = useAppDispatch()
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getCurrentUser([]))
-  },[])
-
+  }, [])
+  
   const { user } = useAppSelector((state: rootReducer) => state.AuthReducer)
-
+  
   const isAuthenticated = Boolean(user)
-
+  
+  
   return (
     <Stack.Navigator
       screenOptions={() => {
