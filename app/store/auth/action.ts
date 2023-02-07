@@ -77,6 +77,7 @@ const signIn = createAsyncThunk<any, UserSignUpRequest, AsyncThunkConfig>(Action
     try {
       const res = await authApi.signIn(registerPayload)
       payload = { user: res, error: null }
+
     } catch (e) {
 
       payload = {
@@ -104,7 +105,7 @@ const logOut = createAsyncThunk<any, any, AsyncThunkConfig>(ActionType.LOG_OUT,
 
     try {
       await authApi.signOut()
-    }catch (e) {
+    } catch (e) {
       console.log(e)
     }
     return null
@@ -117,11 +118,11 @@ const getCurrentUser = createAsyncThunk<any, any, AsyncThunkConfig>(ActionType.C
 
     try {
       return await authApi.getCurrentUser()
-    }catch (e) {
+    } catch (e) {
       console.log(e)
     }
     return null
   })
 
 
-export { signUp, clearErrors, logOut, signIn,getCurrentUser }
+export { signUp, clearErrors, logOut, signIn, getCurrentUser }

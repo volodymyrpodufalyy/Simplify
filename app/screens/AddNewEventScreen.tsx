@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars,react-native/no-inline-styles */
 import React, { useEffect, useState } from "react"
-import { BackHandler, Dimensions, TextInput, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import {
+  ActivityIndicator,
+  BackHandler,
+  Dimensions,
+  TextInput,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native"
 import {
   Dropdown, Header, Icon,
   Text,
@@ -21,6 +30,9 @@ import { addHours } from "date-fns"
 import { setCurrentEvent } from "../store/event/action"
 import { current } from "@reduxjs/toolkit"
 import { openFile } from "../utils/openFile"
+import { DropdownMultiSelect } from "../components/DropdownMultiSelect"
+import { authApi } from "../services/api"
+
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
@@ -44,10 +56,16 @@ export const AddNewEventScreen = ({ navigation }) => {
 
   const [date, setDate] = useState(selectedDate)
   const [name, setName] = useState("")
+  const [selectedPeoples, setSelectedPeoples] = useState<string[]>([])
 
   const [file, setFile] = useState<
     Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null
   >()
+  const [users, setUsers] = useState([])
+  useEffect(()=>{
+    eventsApi.getUsers().then(value => setUsers(value))
+  },[])
+
 
   useEffect(()=>{
     if (currentEvent){
@@ -56,9 +74,8 @@ export const AddNewEventScreen = ({ navigation }) => {
       setTimeStart(timestampToDate(currentEvent.startDate))
       setTimeEnd(timestampToDate(currentEvent.endDate))
       setDate(timestampToDate(currentEvent.startDate))
+      setSelectedPeoples(currentEvent?.people)
     }
-
-
   }, [currentEvent])
   const pickFile = async () => {
     try {
@@ -97,7 +114,6 @@ export const AddNewEventScreen = ({ navigation }) => {
     setDate(date)
     setDatePickerVisibility(false)
   }
-
   const pickStartTime = () => {
     setIsTimeStart(true)
     setTimePickerVisibility(true)
@@ -123,8 +139,9 @@ export const AddNewEventScreen = ({ navigation }) => {
         endDate: dateToTimestamp(replaceTimeInDate(date, timeEnd)),
         files: url ? [url] : [],
         name,
-        people: [],
+        people: selectedPeoples,
         userId: user.uid,
+        userEmail: user.email
       }
 
       if (currentEvent) {
@@ -138,14 +155,13 @@ export const AddNewEventScreen = ({ navigation }) => {
     } else {
       name === "" ? alert("Name is required") : alert("Category is required")
     }
-    
   }
-  
   const backToHome = () => {
     dispatch(setCurrentEvent(null))
     navigation.navigate("Home")
   }
 
+  // @ts-ignore
   BackHandler.addEventListener("hardwareBackPress", function() {
     dispatch(setCurrentEvent(null))
   })
@@ -237,22 +253,39 @@ export const AddNewEventScreen = ({ navigation }) => {
                     }}>
                       <Icon icon={"cross"} size={20} color={"white"} style={{ marginLeft: 20 }} />
                     </TouchableOpacity>
-                  
                   </View>
                 }
               </>
             ) : (
-              <TouchableOpacity onPress={() => openFile(currentEvent?.files[0])}>
-                <Text style={{ color: "white" }}>Files({currentEvent.files.length})</Text>
-              </TouchableOpacity>
+              <View>
+                <Text style={{ color: "white", marginBottom:5 }}>Files({currentEvent.files.length})</Text>
+                {currentEvent.files.length >=1?
+                  <TouchableOpacity style={$file} onPress={() => openFile(currentEvent?.files[0])}>
+                    <Icon icon={"file"} size={40} color={"white"} style={{ marginRight: 10 }} />
+                    <View>
+                      {/* @ts-ignore */}
+                      <Text text={'File'} style={{ color: "white", maxWidth: 150 }} numberOfLines={1} size={"md"} />
+                      {/* @ts-ignore */}
+                    </View>
+                    <TouchableOpacity onPress={() => {
+                      setFile(null)
+                    }}>
+                      <Icon icon={"cross"} size={20} color={"white"} style={{ marginLeft: 20 }} />
+                    </TouchableOpacity>
+                  </TouchableOpacity>:null
+                }
+              </View>
             )}
           </View>
         </View>
         <TouchableOpacity style={$sectionContainer}>
           <Icon icon={"peoples"} color={"white"} size={30} />
-          <TextInput style={$inputName} placeholder={"Add peoples for event"}
-                     placeholderTextColor={colors.palette.neutral400} />
+
+          <DropdownMultiSelect users={users} setSelected={setSelectedPeoples} selected={selectedPeoples}/>
         </TouchableOpacity>
+        <View>
+
+        </View>
       </View>
 
     </View>
@@ -277,7 +310,7 @@ const $container: ViewStyle = {
 
 const $inputName: TextStyle = {
   paddingHorizontal: spacing.medium,
-  
+
   color: colors.palette.neutral100,
   fontSize: 18,
 }
@@ -324,7 +357,7 @@ const $sectionText: ViewStyle = {
   marginLeft: spacing.medium,
   paddingVertical: spacing.small,
   borderColor: colors.palette.neutral600,
-  
+
 }
 
 const $sectionTime: ViewStyle = {

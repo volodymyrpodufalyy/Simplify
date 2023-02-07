@@ -1,15 +1,20 @@
-import { FirebaseAuthTypes } from "@react-native-firebase/auth"
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth"
 import storage from "@react-native-firebase/storage"
 import firestore, { FirebaseFirestoreTypes } from "@react-native-firebase/firestore"
 
 import { Event } from "../../common/types/types"
+import { current } from "@reduxjs/toolkit"
 
 type User = FirebaseAuthTypes.User
 type QueryDocumentSnapshot = FirebaseFirestoreTypes.QueryDocumentSnapshot
 
-
+type UserEmail = {
+  email:'string',
+  uid:'string'
+}
 
 export const mapDocToEvent = (doc: QueryDocumentSnapshot, arr: Event[]) => arr.push(doc.data() as Event)
+export const mapDocToUser = (doc: QueryDocumentSnapshot, arr: UserEmail[]) => arr.push(doc.data() as UserEmail)
 
 export class EventsApi {
 
@@ -24,10 +29,28 @@ export class EventsApi {
     return result
   }
 
+  public async getNotMyEvents(user: User): Promise<Event[]> {
+    const result: Event[] = []
+    const events = await firestore().collection("events")
+      .where("people",  "array-contains", user.email).get()
+    events.forEach((value) => mapDocToEvent(value, result))
+
+    return result
+  }
+
   public async addEvent(event: Event) {
     await firestore()
       .collection("events")
       .add(event)
+  }
+
+  public async getUsers(): Promise<any> {
+    let result: UserEmail[] = []
+    const users = await firestore().collection("users").get()
+    users.forEach(value=>mapDocToUser(value, result))
+    const currentUserEmail = auth().currentUser.email
+    result = result.filter(el=>el.email!==currentUserEmail)
+    return result
   }
 
   public async updateEvent(eventId: string, updatedEvent: Event) {
@@ -37,6 +60,7 @@ export class EventsApi {
       .update(updatedEvent)
   }
   public async uploadFile(file) {
+    console.log(file)
     const reference = storage().ref(`files/${file.name}`);
     await reference.putFile(file.fileCopyUri)
     const url = await reference.getDownloadURL()

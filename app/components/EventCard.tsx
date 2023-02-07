@@ -6,6 +6,7 @@ import { Icon } from "./Icon"
 import { timestampToDate } from "../utils/date"
 
 import { formatHourMinutes } from "../utils/formatDate"
+import auth from "@react-native-firebase/auth"
 
 interface EventCardProps {
   event: Event;
@@ -14,7 +15,6 @@ interface EventCardProps {
 
 export const EventCard = (props: EventCardProps) => {
   const { event, openEvent } = props
-
   const { startDate, endDate } = useMemo(() => {
     return {
       startDate: timestampToDate(event.startDate) ,
@@ -23,9 +23,12 @@ export const EventCard = (props: EventCardProps) => {
   }, [event])
 
   return (
-    <TouchableOpacity style={$eventCard} onPress={()=>openEvent(event)}>
+    <TouchableOpacity style={$eventCard} onPress={()=>openEvent(event)} disabled={event.userEmail !== auth().currentUser.email}>
       <View style={$halfContainer}>
         <Text style={$eventNameText}>{event.name}</Text>
+      </View>
+      <View>
+        {event.userEmail !== auth().currentUser.email? <Text>Shared with you by {event.userEmail}</Text>:null }
       </View>
       <View style={$halfContainer}>
         {event.category ?
@@ -33,7 +36,7 @@ export const EventCard = (props: EventCardProps) => {
             <Text style={$eventCategoryText}>{event.category}</Text>
           </View> : null}
         <View style={$timeContainer}>
-          {event.files? <Icon icon={"file"} size={18} style={{marginRight:5}} />: null}
+          {event.files.length>=1? <Icon icon={"file"} size={18} style={{marginRight:5}} />: null}
           <Icon icon={"clock"} size={18}/>
           <Text style={$eventDateText}>{formatHourMinutes(startDate)}-{formatHourMinutes(endDate)}</Text>
         </View>
@@ -45,7 +48,7 @@ export const EventCard = (props: EventCardProps) => {
 
 const $eventCard: ViewStyle = {
   flex: 1,
-  marginHorizontal: 30,
+  marginHorizontal: 10,
   backgroundColor: colors.palette.eventBg,
   borderRadius: 15,
   paddingLeft: 30,
@@ -71,8 +74,9 @@ const $timeContainer: ViewStyle = {
 }
 
 const $eventCategory: ViewStyle = {
-  height: 24,
+  height: 35,
   flex: 1,
+
   backgroundColor: colors.palette.neutral600,
   borderRadius: 15,
   alignItems: "center",
