@@ -10,8 +10,9 @@ import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import { customFontsToLoad } from "./theme"
 import { setupReactotron } from "./services/reactotron"
 import Config from "./config"
-import store from './store/store'
-import { Provider } from 'react-redux'
+import store from "./store/store"
+import { Provider } from "react-redux"
+import { StatusBar } from "react-native"
 
 setupReactotron({
   clearOnLoad: true,
@@ -27,16 +28,16 @@ interface AppProps {
 
 function App(props: AppProps) {
   const { hideSplashScreen } = props
-
-
+  
+  
   const [areFontsLoaded] = useFonts(customFontsToLoad)
-
+  
   const { rehydrated } = useInitialRootStore(() => {
-      setTimeout(hideSplashScreen, 500)
+    setTimeout(hideSplashScreen, 500)
   })
-
+  
   if (!rehydrated || !areFontsLoaded) return null
-
+  
   return (
     <Provider store={store}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
@@ -45,7 +46,7 @@ function App(props: AppProps) {
         </ErrorBoundary>
       </SafeAreaProvider>
     </Provider>
-
+  
   )
 }
 
