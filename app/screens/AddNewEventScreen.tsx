@@ -17,29 +17,30 @@ import { Event, EventCategory } from "../common/types/types"
 import { useAppSelector } from "../store/store"
 import { dateToTimestamp } from "../utils/date"
 import { CATEGORIES } from "../common/constants"
+import { addHours } from "date-fns"
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window")
 
 export const AddNewEventScreen = ({ navigation }) => {
-
+  
   const category = CATEGORIES.map((value, index) => ({ key: index, value }))
-
+  
+  const { selectedDate } = useAppSelector(state => state.EventsReducer)
+  
   const [selected, setSelected] = useState("")
-
+  
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false)
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
   const [isTimeStart, setIsTimeStart] = useState(true)
-
-  const [timeStart, setTimeStart] = useState(new Date())
-  const [timeEnd, setTimeEnd] = useState(new Date())
-
-  const [date, setDate] = useState(new Date())
+  
+  const [timeStart, setTimeStart] = useState(selectedDate)
+  const [timeEnd, setTimeEnd] = useState(addHours(selectedDate, 1))
+  
+  const [date, setDate] = useState(selectedDate)
   const [name, setName] = useState("")
-
-  const [file, setFile] = useState<
-    Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null
-  >()
-
+  
+  const [file, setFile] = useState<Array<DocumentPickerResponse> | DirectoryPickerResponse | undefined | null>()
+  
   const pickFile = async () => {
     try {
       const pickerResult = await DocumentPicker.pickSingle({
@@ -52,9 +53,9 @@ export const AddNewEventScreen = ({ navigation }) => {
       console.log(e)
     }
   }
-
+  
   const handleConfirmTime = (date) => {
-
+    
     if (isTimeStart) {
       setTimeStart(date)
       if (date >= timeEnd) {
@@ -62,7 +63,7 @@ export const AddNewEventScreen = ({ navigation }) => {
         newDate.setHours(date.getHours() + 1)
         setTimeEnd(newDate)
       }
-
+      
     } else {
       setTimeEnd(date)
       if (date <= timeStart) {
@@ -77,7 +78,7 @@ export const AddNewEventScreen = ({ navigation }) => {
     setDate(date)
     setDatePickerVisibility(false)
   }
-
+  
   const pickStartTime = () => {
     setIsTimeStart(true)
     setTimePickerVisibility(true)
@@ -86,28 +87,28 @@ export const AddNewEventScreen = ({ navigation }) => {
     setIsTimeStart(false)
     setTimePickerVisibility(true)
   }
-
+  
   const { user } = useAppSelector((state) => state.AuthReducer)
-
+  
   const saveEvent = () => {
     if (selected !== "" && name !== "") {
       const event: Event = {
         category: selected,
+        startDate: dateToTimestamp(timeStart),
         endDate: dateToTimestamp(timeStart),
         files: [],
         name,
         people: [],
-        startDate: dateToTimestamp(timeStart),
         userId: user.uid,
       }
       eventsApi.addEvent(event)
       navigation.navigate("Home")
-    }else{
-      name === ""?alert('Name is required'):alert('Category is required')
+    } else {
+      name === "" ? alert("Name is required") : alert("Category is required")
     }
-
+    
   }
-
+  
   return (
     <View style={$container}>
       <DateTimePickerModal
@@ -203,15 +204,15 @@ export const AddNewEventScreen = ({ navigation }) => {
                      placeholderTextColor={colors.palette.neutral400} />
         </TouchableOpacity>
       </View>
-
+    
     </View>
   )
 }
 
 const $file: ViewStyle = {
-
+  
   height: 50,
-
+  
   maxWidth: 250,
   alignItems: "center",
   width: "100%",
@@ -226,7 +227,7 @@ const $container: ViewStyle = {
 
 const $inputName: TextStyle = {
   paddingHorizontal: spacing.medium,
-
+  
   color: colors.palette.neutral100,
   fontSize: 18,
 }
@@ -273,7 +274,7 @@ const $sectionText: ViewStyle = {
   marginLeft: spacing.medium,
   paddingVertical: spacing.small,
   borderColor: colors.palette.neutral600,
-
+  
 }
 
 const $sectionTime: ViewStyle = {
