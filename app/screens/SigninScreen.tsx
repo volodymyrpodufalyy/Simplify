@@ -9,7 +9,7 @@ import {
 } from "react-native"
 import { Button, Icon, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { colors, spacing } from "../theme"
-import { rootReducer, useAppDispatch, useAppSelector } from "../store/store"
+import { useAppDispatch, useAppSelector } from "../store/store"
 import { clearErrors, signIn } from "../store/auth/action"
 
 const welcome = require("../../assets/images/WelcomeBack.png")
@@ -27,7 +27,7 @@ export const SignInScreen = ({ navigation }) => {
   const [authEmail, setAuthEmail] = useState("")
   const [authPassword, setAuthPassword] = useState("")
   const dispatch = useAppDispatch()
-  const { error } = useAppSelector((state: rootReducer) => state.AuthReducer)
+  const { error } = useAppSelector((state) => state.AuthReducer)
 
   function login() {
     dispatch(signIn({ email: authEmail, password: authPassword }))
@@ -35,12 +35,12 @@ export const SignInScreen = ({ navigation }) => {
 
   const onChangeEmail = (text) => {
     setAuthEmail(text)
-    dispatch(clearErrors())
+    dispatch(clearErrors([]))
   }
 
   const onChangePassword = (text) => {
     setAuthPassword(text)
-    dispatch(clearErrors())
+    dispatch(clearErrors([]))
   }
 
   const PasswordRightAccessory = useMemo(

@@ -9,7 +9,7 @@ import {
 } from "react-native"
 import { Button, Icon, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { colors, spacing } from "../theme"
-import { rootReducer, useAppDispatch, useAppSelector } from "../store/store"
+import { useAppDispatch, useAppSelector } from "../store/store"
 import { clearErrors, signUp } from "../store/auth/action"
 
 const coffee = require("../../assets/images/coffe.png")
@@ -26,7 +26,7 @@ export const SignupScreen = ({ navigation }) => {
   const [authEmail, setAuthEmail] = useState("")
   const [authPassword, setAuthPassword] = useState("")
 
-  const { error } = useAppSelector((state: rootReducer) => state.AuthReducer)
+  const { error } = useAppSelector((state) => state.AuthReducer)
 
   const dispatch = useAppDispatch()
   const signUpHandler = () => {
@@ -50,12 +50,12 @@ export const SignupScreen = ({ navigation }) => {
 
   const onChangeEmail = (text) => {
     setAuthEmail(text)
-    dispatch(clearErrors())
+    dispatch(clearErrors([]))
   }
 
   const onChangePassword = (text) => {
     setAuthPassword(text)
-    dispatch(clearErrors())
+    dispatch(clearErrors([]))
   }
 
   return (
