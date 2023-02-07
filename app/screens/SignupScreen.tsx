@@ -10,13 +10,13 @@ import {
 import { Button, Icon, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { colors, spacing } from "../theme"
 import { rootReducer, useAppDispatch, useAppSelector } from "../store/store"
-import { signUp } from "../store/auth/action"
+import { clearErrors, signUp } from "../store/auth/action"
 
 const coffee = require("../../assets/images/coffe.png")
 const google = require("../../assets/images/google.png")
 const facebook = require("../../assets/images/facebook.png")
 
-export const SignupScreen = ({navigation}) => {
+export const SignupScreen = ({ navigation }) => {
   const authPasswordInput = useRef<TextInput>()
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -29,10 +29,8 @@ export const SignupScreen = ({navigation}) => {
   const { error } = useAppSelector((state: rootReducer) => state.AuthReducer)
 
   const dispatch = useAppDispatch()
-  const signUpHandler=()=> {
-    if (authEmail !== '' && authPassword !== '') {
-      dispatch(signUp({ email: authEmail, password: authPassword }))
-    }
+  const signUpHandler = () => {
+    dispatch(signUp({ email: authEmail, password: authPassword }))
   }
 
   const PasswordRightAccessory = useMemo(
@@ -50,6 +48,15 @@ export const SignupScreen = ({navigation}) => {
     [isAuthPasswordHidden],
   )
 
+  const onChangeEmail = (text) => {
+    setAuthEmail(text)
+    dispatch(clearErrors())
+  }
+
+  const onChangePassword = (text) => {
+    setAuthPassword(text)
+    dispatch(clearErrors())
+  }
 
   return (
     <View style={$screenContentContainer}>
@@ -57,7 +64,7 @@ export const SignupScreen = ({navigation}) => {
       <View>
         <Text tx={"loginScreen.forBestImpression"} size={"xll"} style={{ textAlign: "center" }} />
         <Text tx={"loginScreen.signIn"} size={"xl"} style={{ textAlign: "center" }} />
-        <TouchableOpacity onPress={()=>navigation.navigate('SignIn')}>
+        <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
           <Text tx={"loginScreen.haveAccount"} size={"md"}
                 style={{ textAlign: "center", color: colors.palette.secondary500 }} />
         </TouchableOpacity>
@@ -67,7 +74,7 @@ export const SignupScreen = ({navigation}) => {
 
         <TextField
           value={authEmail}
-          onChangeText={setAuthEmail}
+          onChangeText={onChangeEmail}
           containerStyle={$textField}
           autoCapitalize="none"
           autoComplete="email"
@@ -75,15 +82,15 @@ export const SignupScreen = ({navigation}) => {
           keyboardType="email-address"
           labelTx="loginScreen.emailFieldLabel"
           placeholderTx="loginScreen.emailFieldPlaceholder"
-          helper={error?.authEmail}
-          status={error ? "error" : undefined}
+          helper={error?.emailErrorMsg}
+          status={error?.emailErrorMsg ? "error" : undefined}
           onSubmitEditing={() => authPasswordInput.current?.focus()}
         />
 
         <TextField
           ref={authPasswordInput}
           value={authPassword}
-          onChangeText={setAuthPassword}
+          onChangeText={onChangePassword}
           containerStyle={$textField}
           autoCapitalize="none"
           autoComplete="password"
@@ -91,8 +98,8 @@ export const SignupScreen = ({navigation}) => {
           secureTextEntry={isAuthPasswordHidden}
           labelTx="loginScreen.passwordFieldLabel"
           placeholderTx="loginScreen.passwordFieldPlaceholder"
-          // helper={errors?.authPassword}
-          // status={errors?.authPassword ? "error" : undefined}
+          helper={error?.passwordErrorMsg}
+          status={error?.passwordErrorMsg ? "error" : undefined}
           onSubmitEditing={signUpHandler}
           RightAccessory={PasswordRightAccessory}
         />
@@ -106,9 +113,9 @@ export const SignupScreen = ({navigation}) => {
         />
       </View>
       <Text tx={"loginScreen.or"} style={{ textAlign: "center", marginTop: 10 }} />
-      <View style={{ flexDirection: "row" , alignItems:'center', justifyContent:'center'}}>
-        <View style={{marginRight:10}}>
-          <TouchableOpacity  style={$spaces}>
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+        <View style={{ marginRight: 10 }}>
+          <TouchableOpacity style={$spaces}>
             <Image source={google} style={$icoImage} />
           </TouchableOpacity>
           <TouchableOpacity>
@@ -116,17 +123,17 @@ export const SignupScreen = ({navigation}) => {
           </TouchableOpacity>
 
         </View>
-        <View style={{   }}>
-          <TouchableOpacity  style={$spaces}>
-            <Text tx={"loginScreen.signUpGoogle"} size={'sm'}/>
+        <View style={{}}>
+          <TouchableOpacity style={$spaces}>
+            <Text tx={"loginScreen.signUpGoogle"} size={"sm"} />
           </TouchableOpacity>
           <TouchableOpacity>
-            <Text tx={"loginScreen.signUpFacebook"} size={'sm'}/>
+            <Text tx={"loginScreen.signUpFacebook"} size={"sm"} />
           </TouchableOpacity>
         </View>
       </View>
 
-    <Image source={coffee} style={$coffee}/>
+      <Image source={coffee} style={$coffee} />
     </View>
   )
 }
@@ -142,7 +149,7 @@ const $screenContentContainer: ViewStyle = {
 }
 
 const $icoImage: ImageStyle = {
-  width: 25, height: 25
+  width: 25, height: 25,
 }
 
 const $spaces: ViewStyle = {
