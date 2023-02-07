@@ -27,12 +27,13 @@ export const EventCard = (props: EventCardProps) => {
         <Text style={$eventNameText}>{event.name}</Text>
       </View>
       <View style={$halfContainer}>
-        <View style={$eventCategory}>
-          <Text style={$eventCategoryText}>{event.category}</Text>
-        </View>
+        {event.category ?
+          <View style={$eventCategory}>
+            <Text style={$eventCategoryText}>{event.category}</Text>
+          </View> : null}
         <View style={$timeContainer}>
           <Icon icon={"clock"} />
-          <Text>{startDate} - {endDate}</Text>
+          <Text style={$eventDateText}>{startDate} - {endDate}</Text>
         </View>
       </View>
     </View>
@@ -47,7 +48,7 @@ const $eventCard: ViewStyle = {
   borderRadius: 15,
   paddingLeft: 30,
   paddingVertical: 10,
-  marginBottom: 20,
+  marginBottom: 15,
   flexDirection: "column",
   paddingRight: 10,
 }
@@ -64,6 +65,7 @@ const $timeContainer: ViewStyle = {
   flex: 1,
   flexDirection: "row",
   justifyContent: "flex-end",
+  alignItems: "center",
 }
 
 const $eventCategory: ViewStyle = {
@@ -91,4 +93,9 @@ const $eventNameText: TextStyle = {
   fontWeight: "600",
   ...typography.secondary,
   textAlign: "left",
+}
+
+const $eventDateText: TextStyle = {
+  paddingLeft: 6,
+  color: colors.palette.neutral800,
 }
